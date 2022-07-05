@@ -15,10 +15,32 @@ public class TaskViewState {
     @NonNull
     private final String taskDescription;
 
-    public TaskViewState(long taskId, int projectColor, @NonNull String taskDescription) {
+    @NonNull
+    private final String project;
+
+    public TaskViewState(long taskId, int projectColor, @NonNull String taskDescription, @NonNull String project) {
         this.taskId = taskId;
         this.projectColor = projectColor;
         this.taskDescription = taskDescription;
+        this.project = project;
+    }
+
+    public long getTaskId() {
+        return taskId;
+    }
+
+    public int getProjectColor() {
+        return projectColor;
+    }
+
+    @NonNull
+    public String getTaskDescription() {
+        return taskDescription;
+    }
+
+    @NonNull
+    public String getProject() {
+        return project;
     }
 
     @Override
