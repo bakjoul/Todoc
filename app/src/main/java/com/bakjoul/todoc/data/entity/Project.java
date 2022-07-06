@@ -3,6 +3,7 @@ package com.bakjoul.todoc.data.entity;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Objects;
@@ -18,6 +19,11 @@ public class Project {
 
     @ColorInt
     private final int color;
+
+    @Ignore
+    public Project(@NonNull String name, @ColorInt int color) {
+        this(0, name, color);
+    }
 
     public Project(long id, @NonNull String name, int color) {
         this.id = id;
