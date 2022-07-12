@@ -12,6 +12,10 @@ import com.bakjoul.todoc.data.entity.Task;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class TaskRepository {
 
     @NonNull
@@ -20,6 +24,7 @@ public class TaskRepository {
     @NonNull
     private final TaskDao taskDao;
 
+    @Inject
     public TaskRepository(@NonNull ProjectDao projectDao, @NonNull TaskDao taskDao) {
         this.projectDao = projectDao;
         this.taskDao = taskDao;

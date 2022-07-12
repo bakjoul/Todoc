@@ -1,4 +1,4 @@
-package com.bakjoul.todoc.data.sorting;
+package com.bakjoul.todoc.ui.task;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;

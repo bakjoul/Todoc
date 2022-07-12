@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.bakjoul.todoc.data.AppDatabase;
 import com.bakjoul.todoc.data.dao.ProjectDao;
+import com.bakjoul.todoc.data.dao.TaskDao;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -18,11 +19,12 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
-@Module
 @InstallIn(SingletonComponent.class)
-public class HiltModule {
+@Module
+public class DatabaseModule {
 
     @Provides
     @Singleton
@@ -33,10 +35,7 @@ public class HiltModule {
 
     @Provides
     @Singleton
-    public AppDatabase provideAppDatabase(
-            Application application,
-            @IoExecutor Executor ioExecutor
-    ) {
+    public AppDatabase provideDatabase(Application application, @IoExecutor Executor ioExecutor) {
         return AppDatabase.getInstance(application, ioExecutor);
     }
 
@@ -46,11 +45,19 @@ public class HiltModule {
         return appDatabase.projectDao();
     }
 
-    @Qualifier
-    @Retention(RetentionPolicy.RUNTIME)
-    private @interface IoExecutor {}
+    @Provides
+    @Singleton
+    public TaskDao provideTaskDao(@NonNull AppDatabase appDatabase) {
+        return appDatabase.taskDao();
+    }
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    private @interface MainExecutor {}
+    public @interface IoExecutor {
+    }
+
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    private @interface MainExecutor {
+    }
 }
