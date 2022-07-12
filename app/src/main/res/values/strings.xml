@@ -5,4 +5,8 @@
     <string name="task_name_hint">Nom de la tâche</string>
     <string name="project_spinner_hint">Projet</string>
     <string name="add_task_spinner_project_name">Project name</string>
+    <string name="sorting_alphabetic"><![CDATA[A -> Z]]></string>
+    <string name="sorting_alphabetic_inverted"><![CDATA[Z -> A]]></string>
+    <string name="sorting_oldest_first">Les plus anciens d\'abord</string>
+    <string name="sorting_newest_first">Les plus récents d\'abord</string>
 </resources>

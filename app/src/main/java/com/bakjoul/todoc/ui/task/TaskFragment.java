@@ -23,6 +23,10 @@ public class TaskFragment extends Fragment {
 
         TaskFragmentBinding b = TaskFragmentBinding.inflate(inflater, container, false);
 
+        TaskAdapter adapter = new TaskAdapter();
+        b.taskList.setAdapter(adapter);
+
+
         return b.getRoot();
     }
 }
