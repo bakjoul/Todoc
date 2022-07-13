@@ -13,11 +13,11 @@
 
     <style name="AppTheme.Fab" parent="Widget.MaterialComponents.FloatingActionButton" />
 
-    <style name="AppTheme.TextInputLayout" parent="Widget.Material3.TextInputLayout.FilledBox">
+    <style name="AppTheme.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="boxBackgroundColor">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.AutoCompleteTextView" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+    <style name="AppTheme.AutoCompleteTextView" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="boxBackgroundColor">@android:color/transparent</item>
     </style>
 
