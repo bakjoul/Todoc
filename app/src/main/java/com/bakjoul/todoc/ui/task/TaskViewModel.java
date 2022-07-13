@@ -11,6 +11,7 @@ import com.bakjoul.todoc.data.TaskRepository;
 import com.bakjoul.todoc.data.entity.Project;
 import com.bakjoul.todoc.data.entity.Task;
 import com.bakjoul.todoc.di.DatabaseModule;
+import com.bakjoul.todoc.utils.SingleLiveEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +33,8 @@ public class TaskViewModel extends ViewModel {
     private final MutableLiveData<TaskSortingType> taskSortingTypeMutableLiveData = new MutableLiveData<>();
 
     private final MediatorLiveData<List<TaskViewState>> taskViewStateMediatorLiveData = new MediatorLiveData<>();
+
+    private SingleLiveEvent<TaskViewEvent> taskSingleLiveEvent = new SingleLiveEvent<>();
 
     @Inject
     public TaskViewModel(@NonNull TaskRepository taskRepository, @DatabaseModule.IoExecutor @NonNull Executor ioExecutor) {
@@ -101,5 +104,13 @@ public class TaskViewModel extends ViewModel {
 
     public LiveData<List<TaskViewState>> getTaskViewStateMediatorLiveData() {
         return taskViewStateMediatorLiveData;
+    }
+
+    public SingleLiveEvent<TaskViewEvent> getTaskSingleLiveEvent() {
+        return taskSingleLiveEvent;
+    }
+
+    public void onAddButtonClicked() {
+        taskSingleLiveEvent.setValue(TaskViewEvent.DISPLAY_ADD_TASK_DIALOG);
     }
 }
