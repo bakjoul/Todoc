@@ -48,7 +48,7 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     @NonNull
-    private static AppDatabase  create(
+    private static AppDatabase create(
             @NonNull Application application,
             @NonNull Executor ioExecutor
     ) {

@@ -3,6 +3,7 @@ package com.bakjoul.todoc.data.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Comparator;
@@ -19,6 +20,11 @@ public class Task {
 
     @NonNull
     private String taskDescription;
+
+    @Ignore
+    public Task(long projectId, @NonNull String taskDescription) {
+        this(0, projectId, taskDescription);
+    }
 
     public Task(long id, long projectId, @NonNull String taskDescription) {
         this.id = id;
