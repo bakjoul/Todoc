@@ -32,7 +32,7 @@ public class TaskViewModel extends ViewModel {
 
     private final MutableLiveData<TaskSortingType> taskSortingTypeMutableLiveData = new MutableLiveData<>();
 
-    private final MediatorLiveData<List<TaskViewState>> taskViewStateMediatorLiveData = new MediatorLiveData<>();
+    private final MediatorLiveData<TaskViewState> taskViewStateMediatorLiveData = new MediatorLiveData<>();
 
     private SingleLiveEvent<TaskViewEvent> taskSingleLiveEvent = new SingleLiveEvent<>();
 
@@ -61,7 +61,7 @@ public class TaskViewModel extends ViewModel {
             return;
         }
 
-        List<TaskViewState> taskViewStateList = new ArrayList<>();
+        List<TaskViewStateItem> taskViewStateItemList = new ArrayList<>();
 
         if (taskSortingType != null) {
             switch (taskSortingType) {
@@ -84,8 +84,8 @@ public class TaskViewModel extends ViewModel {
             assert projects != null;
             for (Project project : projects) {
                 if (task.getProjectId() == project.getId()) {
-                    taskViewStateList.add(
-                            new TaskViewState(
+                    taskViewStateItemList.add(
+                            new TaskViewStateItem(
                                     task.getId(),
                                     project.getColor(),
                                     task.getTaskDescription(),
@@ -95,14 +95,19 @@ public class TaskViewModel extends ViewModel {
                 }
             }
         }
-        taskViewStateMediatorLiveData.setValue(taskViewStateList);
+        taskViewStateMediatorLiveData.setValue(
+                new TaskViewState(
+                        taskViewStateItemList,
+                        taskViewStateItemList.isEmpty()
+                )
+        );
     }
 
     public void onSortingTypeChanged(TaskSortingType taskSortingType) {
         taskSortingTypeMutableLiveData.setValue(taskSortingType);
     }
 
-    public LiveData<List<TaskViewState>> getTaskViewStateMediatorLiveData() {
+    public LiveData<TaskViewState> getTaskViewStateLiveData() {
         return taskViewStateMediatorLiveData;
     }
 
