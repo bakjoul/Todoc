@@ -83,16 +83,15 @@ public abstract class AppDatabase extends RoomDatabase {
                             )
                     );
 
-                    TaskDao taskDao = AppDatabase.getInstance(application, ioExecutor).taskDao();
+/*                    TaskDao taskDao = AppDatabase.getInstance(application, ioExecutor).taskDao();
 
                     for (int i = 0; i < 10; i++) {
-
                         Task task = new Task(
                                 (i % 3) + 1,
                                 "Task description #" + i
                         );
                         taskDao.insert(task);
-                    }
+                    }*/
                 });
             }
         });

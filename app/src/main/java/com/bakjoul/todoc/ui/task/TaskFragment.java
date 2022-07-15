@@ -35,12 +35,19 @@ public class TaskFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         TaskAdapter adapter = new TaskAdapter();
-        b.taskList.setAdapter(adapter);
+        b.taskRecyclerView.setAdapter(adapter);
 
         b.fabAdd.setOnClickListener(view -> viewModel.onAddButtonClicked());
 
-        viewModel.getTaskViewStateLiveData().observe(getViewLifecycleOwner(), taskViewState ->
-                adapter.submitList(taskViewState.getTaskViewStateItems()));
+        viewModel.getTaskViewStateLiveData().observe(getViewLifecycleOwner(), taskViewState -> {
+                    adapter.submitList(taskViewState.getTaskViewStateItems());
+                    if (taskViewState.isEmptyStateVisible()) {
+                        b.noTask.setVisibility(View.VISIBLE);
+                    } else {
+                        b.noTask.setVisibility(View.GONE);
+                    }
+                }
+        );
 
         viewModel.getTaskSingleLiveEvent().observe(getViewLifecycleOwner(), taskViewEvent -> {
             FragmentTransaction ft = getParentFragmentManager().beginTransaction();

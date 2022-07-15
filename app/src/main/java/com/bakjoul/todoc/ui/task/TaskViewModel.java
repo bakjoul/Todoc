@@ -34,7 +34,7 @@ public class TaskViewModel extends ViewModel {
 
     private final MediatorLiveData<TaskViewState> taskViewStateMediatorLiveData = new MediatorLiveData<>();
 
-    private SingleLiveEvent<TaskViewEvent> taskSingleLiveEvent = new SingleLiveEvent<>();
+    private final SingleLiveEvent<TaskViewEvent> taskSingleLiveEvent = new SingleLiveEvent<>();
 
     @Inject
     public TaskViewModel(@NonNull TaskRepository taskRepository, @DatabaseModule.IoExecutor @NonNull Executor ioExecutor) {
