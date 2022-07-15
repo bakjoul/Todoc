@@ -39,8 +39,8 @@ public class TaskFragment extends Fragment {
 
         b.fabAdd.setOnClickListener(view -> viewModel.onAddButtonClicked());
 
-        viewModel.getTaskViewStateMediatorLiveData().observe(getViewLifecycleOwner(), taskViewStates ->
-                adapter.submitList(taskViewStates));
+        viewModel.getTaskViewStateLiveData().observe(getViewLifecycleOwner(), taskViewState ->
+                adapter.submitList(taskViewState.getTaskViewStateItems()));
 
         viewModel.getTaskSingleLiveEvent().observe(getViewLifecycleOwner(), taskViewEvent -> {
             FragmentTransaction ft = getParentFragmentManager().beginTransaction();
