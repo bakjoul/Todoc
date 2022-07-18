@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@id/add_task_title">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/add_task_title_edit"
+            android:id="@+id/add_task_description_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/task_name_hint"

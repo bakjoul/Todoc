@@ -3,6 +3,8 @@ package com.bakjoul.todoc.ui.add;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bakjoul.todoc.R;
 import com.bakjoul.todoc.databinding.AddTaskDialogBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -49,9 +50,32 @@ public class AddTaskDialogFragment extends DialogFragment {
 
         AddTaskViewModel viewModel = new ViewModelProvider(this).get(AddTaskViewModel.class);
 
-        final AddTaskProjectSpinnerAdapter adapter = new AddTaskProjectSpinnerAdapter(requireContext(), R.layout.add_task_project_spinner_item);
+        AddTaskProjectSpinnerAdapter adapter = new AddTaskProjectSpinnerAdapter(requireContext());
         b.addTaskProjectSpinnerActv.setAdapter(adapter);
-        b.addTaskProjectSpinnerActv.setOnClickListener(view -> viewModel.onProjectSelected());
+        b.addTaskProjectSpinnerActv.setOnItemClickListener((adapterView, view, i, l) ->
+                viewModel.onProjectSelected(adapter.getItem(i).getProjectId()));
+
+        b.addTaskDescriptionEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                viewModel.onTaskDescriptionChanged(editable.toString());
+            }
+        });
+
+        viewModel.getProjectItemsViewState().observe(this, projects -> {
+            adapter.clear();
+            adapter.addAll(projects);
+        });
 
         return b.getRoot();
     }

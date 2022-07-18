@@ -1,28 +1,29 @@
 package com.bakjoul.todoc.ui.add;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
 public class AddTaskViewState {
 
-    @NonNull
+    @Nullable
     private final String taskDescriptionError;
 
-    @NonNull
+    @Nullable
     private final String projectError;
 
-    public AddTaskViewState(@NonNull String taskDescriptionError, @NonNull String projectError) {
+    public AddTaskViewState(@Nullable String taskDescriptionError, @Nullable String projectError) {
         this.taskDescriptionError = taskDescriptionError;
         this.projectError = projectError;
     }
 
-    @NonNull
+    @Nullable
     public String getTaskDescriptionError() {
         return taskDescriptionError;
     }
 
-    @NonNull
+    @Nullable
     public String getProjectError() {
         return projectError;
     }
@@ -32,7 +33,7 @@ public class AddTaskViewState {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AddTaskViewState that = (AddTaskViewState) o;
-        return taskDescriptionError.equals(that.taskDescriptionError) && projectError.equals(that.projectError);
+        return Objects.equals(taskDescriptionError, that.taskDescriptionError) && Objects.equals(projectError, that.projectError);
     }
 
     @Override

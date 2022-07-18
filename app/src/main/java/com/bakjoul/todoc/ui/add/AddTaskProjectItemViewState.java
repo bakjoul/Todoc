@@ -1,5 +1,6 @@
 package com.bakjoul.todoc.ui.add;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
 import java.util.Objects;
@@ -8,12 +9,13 @@ public class AddTaskProjectItemViewState {
 
     private final long projectId;
 
+    @ColorInt
     private final int projectColor;
 
     @NonNull
     private final String projectName;
 
-    public AddTaskProjectItemViewState(long projectId, int projectColor, @NonNull String projectName) {
+    public AddTaskProjectItemViewState(long projectId, @ColorInt int projectColor, @NonNull String projectName) {
         this.projectId = projectId;
         this.projectColor = projectColor;
         this.projectName = projectName;
