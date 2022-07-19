@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.bakjoul.todoc.data.AppDatabase;
 import com.bakjoul.todoc.data.dao.ProjectDao;
 import com.bakjoul.todoc.data.dao.TaskDao;
+import com.bakjoul.todoc.utils.MainThreadExecutor;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -19,7 +20,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
-import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
 @InstallIn(SingletonComponent.class)
@@ -31,6 +31,13 @@ public class DatabaseModule {
     @IoExecutor
     public Executor provideIoExecutor() {
         return Executors.newFixedThreadPool(4);
+    }
+
+    @Provides
+    @Singleton
+    @MainExecutor
+    public Executor provideMainExecutor() {
+        return new MainThreadExecutor();
     }
 
     @Provides
@@ -58,6 +65,6 @@ public class DatabaseModule {
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    private @interface MainExecutor {
+    public @interface MainExecutor {
     }
 }

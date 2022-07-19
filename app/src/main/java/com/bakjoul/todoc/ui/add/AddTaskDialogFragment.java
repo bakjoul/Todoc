@@ -72,6 +72,13 @@ public class AddTaskDialogFragment extends DialogFragment {
             }
         });
 
+        b.addTaskAddButton.setOnClickListener(view -> viewModel.onAddButtonClicked());
+
+        viewModel.getAddTaskViewStateLiveData().observe(this, addTaskViewState -> {
+            b.addTaskDescription.setError(addTaskViewState.getTaskDescriptionError());
+            b.addTaskProjectSpinnerLayout.setError(addTaskViewState.getProjectError());
+        });
+
         viewModel.getProjectItemsViewState().observe(this, projects -> {
             adapter.clear();
             adapter.addAll(projects);

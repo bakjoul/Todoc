@@ -11,9 +11,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.bakjoul.todoc.data.TaskRepository;
 import com.bakjoul.todoc.data.entity.Project;
+import com.bakjoul.todoc.di.DatabaseModule;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
@@ -26,10 +28,14 @@ public class AddTaskViewModel extends ViewModel {
     private final Application application;
     @NonNull
     private final TaskRepository taskRepository;
+    @NonNull
+    private final Executor ioExecutor;
+    @NonNull
+    private final Executor mainExecutor;
 
     private final MutableLiveData<AddTaskViewState> addTaskViewStateLiveData = new MutableLiveData<>();
 
-    private LiveData<List<AddTaskProjectItemViewState>> projectItemsViewState;
+    private final LiveData<List<AddTaskProjectItemViewState>> projectItemsViewState;
 
     @Nullable
     private String taskDescription;
@@ -38,9 +44,14 @@ public class AddTaskViewModel extends ViewModel {
     private Long projectId;
 
     @Inject
-    public AddTaskViewModel(@NonNull Application application, @NonNull TaskRepository taskRepository) {
+    public AddTaskViewModel(@NonNull Application application,
+                            @NonNull TaskRepository taskRepository,
+                            @NonNull @DatabaseModule.IoExecutor Executor ioExecutor,
+                            @NonNull @DatabaseModule.MainExecutor Executor mainExecutor) {
         this.application = application;
         this.taskRepository = taskRepository;
+        this.ioExecutor = ioExecutor;
+        this.mainExecutor = mainExecutor;
 
         projectItemsViewState = Transformations.map(
                 taskRepository.getAllProjects(), projects -> {
@@ -57,7 +68,6 @@ public class AddTaskViewModel extends ViewModel {
                     return projectItemViewStateList;
                 }
         );
-
     }
 
     public LiveData<AddTaskViewState> getAddTaskViewStateLiveData() {
@@ -76,4 +86,38 @@ public class AddTaskViewModel extends ViewModel {
         this.projectId = projectId;
     }
 
+    public void onAddButtonClicked() {
+        if (areInputsOk()) {
+
+        }
+    }
+
+    private Boolean areInputsOk() {
+        boolean areInputsOk = true;
+
+        String taskDescriptionError;
+        if (taskDescription == null || taskDescription.isEmpty()) {
+            taskDescriptionError = "Veuillez saisir une tâche";
+            areInputsOk = false;
+        } else {
+            taskDescriptionError = null;
+        }
+
+        String projectError;
+        if (projectId == null) {
+            projectError = "Veuillez selectionner un projet";
+            areInputsOk = false;
+        } else {
+            projectError = null;
+        }
+
+        addTaskViewStateLiveData.setValue(
+                new AddTaskViewState(
+                        taskDescriptionError,
+                        projectError
+                )
+        );
+
+        return areInputsOk;
+    }
 }
