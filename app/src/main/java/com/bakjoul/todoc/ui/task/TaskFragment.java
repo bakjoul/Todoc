@@ -1,9 +1,11 @@
 package com.bakjoul.todoc.ui.task;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -76,5 +78,25 @@ public class TaskFragment extends Fragment implements TaskOnDeleteClickedListene
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.actions, menu);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filter_alphabetical:
+                viewModel.onSortingTypeChanged(TaskSortingType.AZ);
+                return true;
+            case R.id.filter_alphabetical_inverted:
+                viewModel.onSortingTypeChanged(TaskSortingType.ZA);
+                return true;
+            case R.id.filter_oldest_first:
+                viewModel.onSortingTypeChanged(TaskSortingType.OLDEST_FIRST);
+                return true;
+            case R.id.filter_recent_first:
+                viewModel.onSortingTypeChanged(TaskSortingType.NEWEST_FIRST);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
