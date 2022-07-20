@@ -71,14 +71,14 @@ public class Task {
     public static class TaskAZComparator implements Comparator<Task> {
         @Override
         public int compare(@NonNull Task left, @NonNull Task right) {
-            return left.taskDescription.compareTo(right.taskDescription);
+            return Long.compare(right.getProjectId(), left.getProjectId());
         }
     }
 
     public static class TaskZAComparator implements Comparator<Task> {
         @Override
         public int compare(@NonNull Task left, @NonNull Task right) {
-            return right.taskDescription.compareTo(left.taskDescription);
+            return Long.compare(left.getProjectId(), right.getProjectId());
         }
     }
 
