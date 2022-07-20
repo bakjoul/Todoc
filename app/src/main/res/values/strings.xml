@@ -11,4 +11,5 @@
     <string name="sorting_newest_first">Les plus récents d\'abord</string>
     <string name="add_task_title">Ajouter une tâche</string>
     <string name="add_task_add_button">Ajouter</string>
+    <string name="label_action_filter">Filtre</string>
 </resources>

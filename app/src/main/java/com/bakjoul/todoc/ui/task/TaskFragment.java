@@ -2,6 +2,8 @@ package com.bakjoul.todoc.ui.task;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bakjoul.todoc.R;
 import com.bakjoul.todoc.databinding.TaskFragmentBinding;
 import com.bakjoul.todoc.ui.ViewEvent;
 import com.bakjoul.todoc.ui.add.AddTaskDialogFragment;
@@ -31,7 +34,7 @@ public class TaskFragment extends Fragment implements TaskOnDeleteClickedListene
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        setHasOptionsMenu(true);
         TaskFragmentBinding b = TaskFragmentBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
@@ -68,5 +71,10 @@ public class TaskFragment extends Fragment implements TaskOnDeleteClickedListene
     @Override
     public void onDeleteTaskButtonClick(long taskId) {
         viewModel.onDeleteTaskButtonClicked(taskId);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.actions, menu);
     }
 }
