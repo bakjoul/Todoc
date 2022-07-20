@@ -11,6 +11,7 @@ import com.bakjoul.todoc.data.TaskRepository;
 import com.bakjoul.todoc.data.entity.Project;
 import com.bakjoul.todoc.data.entity.Task;
 import com.bakjoul.todoc.di.DatabaseModule;
+import com.bakjoul.todoc.ui.ViewEvent;
 import com.bakjoul.todoc.utils.SingleLiveEvent;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class TaskViewModel extends ViewModel {
 
     private final MediatorLiveData<TaskViewState> taskViewStateMediatorLiveData = new MediatorLiveData<>();
 
-    private final SingleLiveEvent<TaskViewEvent> taskSingleLiveEvent = new SingleLiveEvent<>();
+    private final SingleLiveEvent<ViewEvent> taskViewEvent = new SingleLiveEvent<>();
 
     @Inject
     public TaskViewModel(@NonNull TaskRepository taskRepository, @DatabaseModule.IoExecutor @NonNull Executor ioExecutor) {
@@ -57,7 +58,7 @@ public class TaskViewModel extends ViewModel {
     }
 
     private void combine(@Nullable List<Task> tasks, @Nullable TaskSortingType taskSortingType, @Nullable List<Project> projects) {
-        if (tasks == null) {
+        if (tasks == null || projects == null) {
             return;
         }
 
@@ -81,7 +82,6 @@ public class TaskViewModel extends ViewModel {
         }
 
         for (Task task : tasks) {
-            assert projects != null;
             for (Project project : projects) {
                 if (task.getProjectId() == project.getId()) {
                     taskViewStateItemList.add(
@@ -111,11 +111,11 @@ public class TaskViewModel extends ViewModel {
         return taskViewStateMediatorLiveData;
     }
 
-    public SingleLiveEvent<TaskViewEvent> getTaskSingleLiveEvent() {
-        return taskSingleLiveEvent;
+    public SingleLiveEvent<ViewEvent> getTaskViewEvent() {
+        return taskViewEvent;
     }
 
     public void onAddButtonClicked() {
-        taskSingleLiveEvent.setValue(TaskViewEvent.DISPLAY_ADD_TASK_DIALOG);
+        taskViewEvent.setValue(ViewEvent.DISPLAY_ADD_TASK_DIALOG);
     }
 }

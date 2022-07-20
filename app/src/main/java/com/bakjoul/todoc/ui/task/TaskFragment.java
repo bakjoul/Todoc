@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bakjoul.todoc.databinding.TaskFragmentBinding;
+import com.bakjoul.todoc.ui.ViewEvent;
 import com.bakjoul.todoc.ui.add.AddTaskDialogFragment;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -49,10 +50,10 @@ public class TaskFragment extends Fragment {
                 }
         );
 
-        viewModel.getTaskSingleLiveEvent().observe(getViewLifecycleOwner(), taskViewEvent -> {
+        viewModel.getTaskViewEvent().observe(getViewLifecycleOwner(), viewEvent -> {
             FragmentTransaction ft = getParentFragmentManager().beginTransaction();
             Fragment prev;
-            if (taskViewEvent == TaskViewEvent.DISPLAY_ADD_TASK_DIALOG) {
+            if (viewEvent == ViewEvent.DISPLAY_ADD_TASK_DIALOG) {
                 prev = getParentFragmentManager().findFragmentByTag(TAG_ADD_TASK_DIALOG);
                 if (prev == null) {
                     ft.addToBackStack(null);

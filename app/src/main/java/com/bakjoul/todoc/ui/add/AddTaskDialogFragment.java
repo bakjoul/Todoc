@@ -84,6 +84,8 @@ public class AddTaskDialogFragment extends DialogFragment {
             adapter.addAll(projects);
         });
 
+        viewModel.getAddTaskViewEvent().observe(this, viewEvent -> dismiss());
+
         return b.getRoot();
     }
 }

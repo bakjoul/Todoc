@@ -1,6 +1,7 @@
 package com.bakjoul.todoc.ui.add;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,7 +12,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.bakjoul.todoc.data.TaskRepository;
 import com.bakjoul.todoc.data.entity.Project;
+import com.bakjoul.todoc.data.entity.Task;
 import com.bakjoul.todoc.di.DatabaseModule;
+import com.bakjoul.todoc.ui.ViewEvent;
+import com.bakjoul.todoc.utils.SingleLiveEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,8 @@ public class AddTaskViewModel extends ViewModel {
     private final MutableLiveData<AddTaskViewState> addTaskViewStateLiveData = new MutableLiveData<>();
 
     private final LiveData<List<AddTaskProjectItemViewState>> projectItemsViewState;
+
+    private final SingleLiveEvent<ViewEvent> addTaskViewEvent = new SingleLiveEvent<>();
 
     @Nullable
     private String taskDescription;
@@ -78,6 +84,10 @@ public class AddTaskViewModel extends ViewModel {
         return projectItemsViewState;
     }
 
+    public SingleLiveEvent<ViewEvent> getAddTaskViewEvent() {
+        return addTaskViewEvent;
+    }
+
     public void onTaskDescriptionChanged(String taskDescription) {
         this.taskDescription = taskDescription;
     }
@@ -88,7 +98,17 @@ public class AddTaskViewModel extends ViewModel {
 
     public void onAddButtonClicked() {
         if (areInputsOk()) {
+            assert projectId != null;
+            assert taskDescription != null;
 
+            ioExecutor.execute(() -> {
+                try {
+                    taskRepository.addTask(new Task(projectId, taskDescription));
+                    mainExecutor.execute(() -> addTaskViewEvent.setValue(ViewEvent.DISMISS_ADD_TASK_DIALOG));
+                } catch (SQLiteException ignored) {
+
+                }
+            });
         }
     }
 
