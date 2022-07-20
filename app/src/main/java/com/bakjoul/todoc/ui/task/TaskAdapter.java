@@ -12,8 +12,12 @@ import com.bakjoul.todoc.databinding.TaskItemBinding;
 
 public class TaskAdapter extends ListAdapter<TaskViewStateItem, TaskAdapter.ViewHolder> {
 
-    public TaskAdapter() {
+    @NonNull
+    private final TaskOnDeleteClickedListener listener;
+
+    public TaskAdapter(@NonNull TaskOnDeleteClickedListener listener) {
         super(new TaskAdapterDiffCallback());
+        this.listener = listener;
     }
 
     @NonNull
@@ -25,7 +29,7 @@ public class TaskAdapter extends ListAdapter<TaskViewStateItem, TaskAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull TaskAdapter.ViewHolder holder, int position) {
-        holder.bind(getItem(position));
+        holder.bind(getItem(position), listener);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -37,10 +41,12 @@ public class TaskAdapter extends ListAdapter<TaskViewStateItem, TaskAdapter.View
             this.b = binding;
         }
 
-        public void bind(@NonNull TaskViewStateItem taskViewStateItem) {
+        public void bind(@NonNull TaskViewStateItem taskViewStateItem, @NonNull TaskOnDeleteClickedListener listener) {
             b.taskItemProjectColor.setColorFilter(taskViewStateItem.getProjectColor());
             b.taskItemDescription.setText(taskViewStateItem.getTaskDescription());
             b.taskItemProject.setText(taskViewStateItem.getProject());
+
+            b.taskItemDelete.setOnClickListener(view -> listener.onDeleteTaskButtonClick(taskViewStateItem.getTaskId()));
         }
     }
 

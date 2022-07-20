@@ -18,7 +18,7 @@ import com.bakjoul.todoc.ui.add.AddTaskDialogFragment;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class TaskFragment extends Fragment {
+public class TaskFragment extends Fragment implements TaskOnDeleteClickedListener {
 
     private final String TAG_ADD_TASK_DIALOG = "ADD";
 
@@ -35,7 +35,7 @@ public class TaskFragment extends Fragment {
         TaskFragmentBinding b = TaskFragmentBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
-        TaskAdapter adapter = new TaskAdapter();
+        TaskAdapter adapter = new TaskAdapter(this);
         b.taskRecyclerView.setAdapter(adapter);
 
         b.fabAdd.setOnClickListener(view -> viewModel.onAddButtonClicked());
@@ -63,5 +63,10 @@ public class TaskFragment extends Fragment {
         });
 
         return b.getRoot();
+    }
+
+    @Override
+    public void onDeleteTaskButtonClick(long taskId) {
+        viewModel.onDeleteTaskButtonClicked(taskId);
     }
 }

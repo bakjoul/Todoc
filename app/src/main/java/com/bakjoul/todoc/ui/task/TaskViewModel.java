@@ -118,4 +118,8 @@ public class TaskViewModel extends ViewModel {
     public void onAddButtonClicked() {
         taskViewEvent.setValue(ViewEvent.DISPLAY_ADD_TASK_DIALOG);
     }
+
+    public void onDeleteTaskButtonClicked(long taskId) {
+        ioExecutor.execute(() -> taskRepository.deleteTask(taskId));
+    }
 }
