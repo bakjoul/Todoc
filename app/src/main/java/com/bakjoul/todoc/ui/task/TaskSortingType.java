@@ -1,9 +1,12 @@
 package com.bakjoul.todoc.ui.task;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 
-import com.bakjoul.todoc.R;
+import com.bakjoul.todoc.data.entity.Task;
+
+import org.jetbrains.annotations.Contract;
+
+import java.util.Comparator;
 
 public enum TaskSortingType {
 
@@ -19,8 +22,24 @@ public enum TaskSortingType {
         this.sortingTypeStringRes = sortingTypeStringRes;
     }
 
-    public int getSortingTypeStringRes() {
-        return sortingTypeStringRes;
+    public Comparator<Task> getComparator() {
+        return comparator;
+    }
+
+    @NonNull
+    @Contract(pure = true)
+    @Override
+    public String toString() {
+        return "TaskSortingType{" +
+                "comparator=" + comparator +
+                '}';
+    }
+
+    private static class TaskAZComparator implements Comparator<Task> {
+        @Override
+        public int compare(@NonNull Task left, @NonNull Task right) {
+            return Long.compare(right.getProjectId(), left.getProjectId());
+        }
     }
 
     @NonNull
