@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.bakjoul.todoc.R;
 import com.bakjoul.todoc.data.TaskRepository;
 import com.bakjoul.todoc.data.entity.Project;
 import com.bakjoul.todoc.data.entity.Task;
@@ -117,7 +118,7 @@ public class AddTaskViewModel extends ViewModel {
 
         String taskDescriptionError;
         if (taskDescription == null || taskDescription.isEmpty()) {
-            taskDescriptionError = "Veuillez saisir une tâche";
+            taskDescriptionError = application.getString(R.string.error_task_description);
             areInputsOk = false;
         } else {
             taskDescriptionError = null;
@@ -125,7 +126,7 @@ public class AddTaskViewModel extends ViewModel {
 
         String projectError;
         if (projectId == null) {
-            projectError = "Veuillez selectionner un projet";
+            projectError = application.getString(R.string.error_project);
             areInputsOk = false;
         } else {
             projectError = null;

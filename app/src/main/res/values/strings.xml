@@ -12,4 +12,6 @@
     <string name="add_task_title">Ajouter une tâche</string>
     <string name="add_task_add_button">Ajouter</string>
     <string name="label_action_filter">Filtre</string>
+    <string name="error_task_description">Veuillez saisir une tâche</string>
+    <string name="error_project">Veuillez selectionner un projet</string>
 </resources>
