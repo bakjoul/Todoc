@@ -66,32 +66,4 @@ public class Task {
                 ", taskDescription='" + taskDescription + '\'' +
                 '}';
     }
-
-    public static class TaskAZComparator implements Comparator<Task> {
-        @Override
-        public int compare(@NonNull Task left, @NonNull Task right) {
-            return Long.compare(right.getProjectId(), left.getProjectId());
-        }
-    }
-
-    public static class TaskZAComparator implements Comparator<Task> {
-        @Override
-        public int compare(@NonNull Task left, @NonNull Task right) {
-            return Long.compare(left.getProjectId(), right.getProjectId());
-        }
-    }
-
-    public static class TaskRecentComparator implements Comparator<Task> {
-        @Override
-        public int compare(@NonNull Task left, @NonNull Task right) {
-            return (int) (right.getId() - left.getId());
-        }
-    }
-
-    public static class TaskOldComparator implements Comparator<Task> {
-        @Override
-        public int compare(@NonNull Task left, @NonNull Task right) {
-            return (int) (left.getId() - right.getId());
-        }
-    }
 }

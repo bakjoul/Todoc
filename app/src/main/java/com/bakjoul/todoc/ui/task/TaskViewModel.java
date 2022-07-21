@@ -65,20 +65,7 @@ public class TaskViewModel extends ViewModel {
         List<TaskViewStateItem> taskViewStateItemList = new ArrayList<>();
 
         if (taskSortingType != null) {
-            switch (taskSortingType) {
-                case AZ:
-                    Collections.sort(tasks, new Task.TaskAZComparator());
-                    break;
-                case ZA:
-                    Collections.sort(tasks, new Task.TaskZAComparator());
-                    break;
-                case NEWEST_FIRST:
-                    Collections.sort(tasks, new Task.TaskRecentComparator());
-                    break;
-                case OLDEST_FIRST:
-                    Collections.sort(tasks, new Task.TaskOldComparator());
-                    break;
-            }
+            Collections.sort(tasks, taskSortingType.getComparator());
         }
 
         for (Task task : tasks) {
@@ -92,6 +79,7 @@ public class TaskViewModel extends ViewModel {
                                     project.getName()
                             )
                     );
+                    break;
                 }
             }
         }

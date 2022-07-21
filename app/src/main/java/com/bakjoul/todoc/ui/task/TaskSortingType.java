@@ -10,16 +10,15 @@ import java.util.Comparator;
 
 public enum TaskSortingType {
 
-    AZ(R.string.sorting_alphabetic),
-    ZA(R.string.sorting_alphabetic_inverted),
-    OLDEST_FIRST(R.string.sorting_oldest_first),
-    NEWEST_FIRST(R.string.sorting_newest_first);
+    AZ(new TaskAZComparator()),
+    ZA(new TaskZAComparator()),
+    OLDEST_FIRST(new TaskOldComparator()),
+    NEWEST_FIRST(new TaskRecentComparator());
 
-    @StringRes
-    private final int sortingTypeStringRes;
+    private final Comparator<Task> comparator;
 
-    TaskSortingType(int sortingTypeStringRes) {
-        this.sortingTypeStringRes = sortingTypeStringRes;
+    TaskSortingType(Comparator<Task> comparator) {
+        this.comparator = comparator;
     }
 
     public Comparator<Task> getComparator() {
@@ -42,11 +41,24 @@ public enum TaskSortingType {
         }
     }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "TaskSortingType{" +
-                "sortingTypeStringRes=" + sortingTypeStringRes +
-                '}';
+    private static class TaskZAComparator implements Comparator<Task> {
+        @Override
+        public int compare(@NonNull Task left, @NonNull Task right) {
+            return Long.compare(left.getProjectId(), right.getProjectId());
+        }
+    }
+
+    private static class TaskOldComparator implements Comparator<Task> {
+        @Override
+        public int compare(@NonNull Task left, @NonNull Task right) {
+            return (int) (left.getId() - right.getId());
+        }
+    }
+
+    private static class TaskRecentComparator implements Comparator<Task> {
+        @Override
+        public int compare(@NonNull Task left, @NonNull Task right) {
+            return (int) (right.getId() - left.getId());
+        }
     }
 }

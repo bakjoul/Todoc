@@ -98,22 +98,21 @@ public class AddTaskViewModel extends ViewModel {
     }
 
     public void onAddButtonClicked() {
-        if (areInputsOk()) {
-            assert projectId != null;
-            assert taskDescription != null;
-
+        Form form = getFormattedInputs();
+        if (form != null) {
             ioExecutor.execute(() -> {
                 try {
-                    taskRepository.addTask(new Task(projectId, taskDescription));
+                    taskRepository.addTask(new Task(form.projectId, form.taskDescription));
                     mainExecutor.execute(() -> addTaskViewEvent.setValue(ViewEvent.DISMISS_ADD_TASK_DIALOG));
-                } catch (SQLiteException ignored) {
-
+                } catch (SQLiteException e) {
+                    e.printStackTrace();
                 }
             });
         }
     }
 
-    private Boolean areInputsOk() {
+    @Nullable
+    private Form getFormattedInputs() {
         boolean areInputsOk = true;
 
         String taskDescriptionError;
@@ -139,6 +138,26 @@ public class AddTaskViewModel extends ViewModel {
                 )
         );
 
-        return areInputsOk;
+        Form result = null;
+
+        if (areInputsOk) {
+            result = new Form(
+                    taskDescription,
+                    projectId
+            );
+        }
+        return result;
     }
+
+    private static class Form {
+        @NonNull
+        private final String taskDescription;
+        private final long projectId;
+
+        public Form(@NonNull String taskDescription, long projectId) {
+            this.taskDescription = taskDescription;
+            this.projectId = projectId;
+        }
+    }
+
 }
