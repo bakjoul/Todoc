@@ -1,6 +1,7 @@
 package com.bakjoul.todoc.ui.task;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -10,8 +11,6 @@ import com.bakjoul.todoc.data.TaskRepository;
 import com.bakjoul.todoc.data.entity.Project;
 import com.bakjoul.todoc.data.entity.Task;
 import com.bakjoul.todoc.utils.LiveDataTestUtil;
-
-import static org.mockito.ArgumentMatchers.any;
 import com.bakjoul.todoc.utils.TestExecutor;
 
 import org.junit.Before;
@@ -20,6 +19,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -71,6 +71,84 @@ public class TaskViewModelTest {
         Mockito.verifyNoMoreInteractions(taskRepository, ioExecutor);
     }
 
+    @Test
+    public void initial_case() {
+        // Given
+        projectsLiveData.setValue(new ArrayList<>());
+        tasksLiveData.setValue(new ArrayList<>());
+
+        // When
+        TaskViewState taskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getTaskViewStateLiveData());
+
+        // Then
+        assertEquals(getEmptyTaskViewState(), taskViewState);
+    }
+
+    @Test
+    public void sortByProjectAZ() {
+        // Given
+        viewModel.onSortingTypeChanged(TaskSortingType.AZ);
+
+        // When
+        TaskViewState taskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getTaskViewStateLiveData());
+
+        // Then
+        assertEquals(getDefaultTaskViewStateSortedByProjectAZ(), taskViewState);
+    }
+
+    @Test
+    public void sortByProjectZA() {
+        // Given
+        viewModel.onSortingTypeChanged(TaskSortingType.AZ);
+        viewModel.onSortingTypeChanged(TaskSortingType.ZA);
+
+        // When
+        TaskViewState taskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getTaskViewStateLiveData());
+
+        // Then
+        assertEquals(getDefaultTaskViewStateSortedByProjectZA(), taskViewState);
+    }
+
+    @Test
+    public void sortByOldestFirst() {
+        // Given
+        viewModel.onSortingTypeChanged(TaskSortingType.AZ);
+        viewModel.onSortingTypeChanged(TaskSortingType.OLDEST_FIRST);
+
+        // When
+        TaskViewState taskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getTaskViewStateLiveData());
+
+        // Then
+        assertEquals(getDefaultTaskViewState(), taskViewState);
+    }
+
+    @Test
+    public void sortByNewestFirst() {
+        // Given
+        viewModel.onSortingTypeChanged(TaskSortingType.OLDEST_FIRST);
+        viewModel.onSortingTypeChanged(TaskSortingType.NEWEST_FIRST);
+
+        // When
+        TaskViewState taskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getTaskViewStateLiveData());
+
+        // Then
+        assertEquals(getDefaultTaskViewStateSortedByNewestFirst(), taskViewState);
+    }
+
+    @Test
+    public void verify_onDeleteTaskButtonClicked() {
+        // Given
+        long taskId = 3;
+
+        // When
+        viewModel.onDeleteTaskButtonClicked(taskId);
+
+        // Then
+        Mockito.verify(taskRepository).deleteTask(taskId);
+        Mockito.verify(ioExecutor).execute(any());
+        Mockito.verifyNoMoreInteractions(taskRepository, ioExecutor);
+    }
+
     // region IN
     @NonNull
     private List<Project> getDefaultProjects() {
@@ -113,6 +191,38 @@ public class TaskViewModelTest {
             }
         }
         return new TaskViewState(taskViewStateItemList, taskViewStateItemList.isEmpty());
+    }
+
+    @NonNull
+    private TaskViewState getEmptyTaskViewState() {
+        return new TaskViewState(new ArrayList<>(), true);
+    }
+
+    @NonNull
+    private TaskViewState getDefaultTaskViewStateSortedByProjectAZ() {
+        List<TaskViewStateItem> taskViewStateItemList = new ArrayList<>();
+        taskViewStateItemList.add(new TaskViewStateItem(TASK_PROJECT_3.getId(), PROJECT_3.getColor(), TASK_PROJECT_3.getTaskDescription(), PROJECT_3.getName()));
+        taskViewStateItemList.add(new TaskViewStateItem(TASK_PROJECT_2.getId(), PROJECT_2.getColor(), TASK_PROJECT_2.getTaskDescription(), PROJECT_2.getName()));
+        taskViewStateItemList.add(new TaskViewStateItem(TASK_PROJECT_1.getId(), PROJECT_1.getColor(), TASK_PROJECT_1.getTaskDescription(), PROJECT_1.getName()));
+
+        return new TaskViewState(taskViewStateItemList, false);
+    }
+
+    @NonNull
+    private TaskViewState getDefaultTaskViewStateSortedByProjectZA() {
+        List<TaskViewStateItem> taskViewStateItemList = new ArrayList<>();
+        taskViewStateItemList.add(new TaskViewStateItem(TASK_PROJECT_1.getId(), PROJECT_1.getColor(), TASK_PROJECT_1.getTaskDescription(), PROJECT_1.getName()));
+        taskViewStateItemList.add(new TaskViewStateItem(TASK_PROJECT_2.getId(), PROJECT_2.getColor(), TASK_PROJECT_2.getTaskDescription(), PROJECT_2.getName()));
+        taskViewStateItemList.add(new TaskViewStateItem(TASK_PROJECT_3.getId(), PROJECT_3.getColor(), TASK_PROJECT_3.getTaskDescription(), PROJECT_3.getName()));
+
+        return new TaskViewState(taskViewStateItemList, false);
+    }
+
+    @NonNull
+    private TaskViewState getDefaultTaskViewStateSortedByNewestFirst() {
+        List<TaskViewStateItem> taskViewStateItemList = getDefaultTaskViewState().getTaskViewStateItems();
+        Collections.reverse(taskViewStateItemList);
+        return new TaskViewState(taskViewStateItemList, false);
     }
     // endregion
 }
