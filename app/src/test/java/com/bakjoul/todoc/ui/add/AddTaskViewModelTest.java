@@ -2,6 +2,7 @@ package com.bakjoul.todoc.ui.add;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import android.app.Application;
 
@@ -112,33 +113,13 @@ public class AddTaskViewModelTest {
         projectsLiveData.setValue(null);
 
         // When
-        AddTaskViewState addTaskViewState;
-        try {
-            addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
-        } catch (AssertionError assertionError) {
-            assertEquals("LiveData value is null !", assertionError.getMessage());
-            addTaskViewState = null;
-        }
-
-        List<AddTaskProjectItemViewState> addTaskProjectItemViewStateList;
-        try {
-            addTaskProjectItemViewStateList = LiveDataTestUtil.getValueForTesting(viewModel.getProjectItemsViewState());
-        } catch (AssertionError assertionError) {
-            assertEquals("LiveData value is null !", assertionError.getMessage());
-            addTaskProjectItemViewStateList = null;
-        }
-
-        ViewEvent viewEvent;
-        try {
-            viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
-        } catch (AssertionError assertionError) {
-            assertEquals("LiveData value is null !", assertionError.getMessage());
-            viewEvent = null;
-        }
+        AddTaskViewState addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
+        List<AddTaskProjectItemViewState> addTaskProjectItemViewStateList = LiveDataTestUtil.getValueForTesting(viewModel.getProjectItemsViewState());
+        ViewEvent viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
 
         // Then
         assertNull(addTaskViewState);
-        assertNull(addTaskProjectItemViewStateList);
+        assertTrue(addTaskProjectItemViewStateList.isEmpty());
         assertNull(viewEvent);
     }
 

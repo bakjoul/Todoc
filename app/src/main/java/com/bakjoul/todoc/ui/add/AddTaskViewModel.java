@@ -63,15 +63,18 @@ public class AddTaskViewModel extends ViewModel {
         projectItemsViewState = Transformations.map(
                 taskRepository.getAllProjects(), projects -> {
                     List<AddTaskProjectItemViewState> projectItemViewStateList = new ArrayList<>();
-                    for (Project project : projects) {
-                        projectItemViewStateList.add(
-                                new AddTaskProjectItemViewState(
-                                        project.getId(),
-                                        project.getColor(),
-                                        project.getName()
-                                )
-                        );
+                    if (projects != null) {
+                        for (Project project : projects) {
+                            projectItemViewStateList.add(
+                                    new AddTaskProjectItemViewState(
+                                            project.getId(),
+                                            project.getColor(),
+                                            project.getName()
+                                    )
+                            );
+                        }
                     }
+
                     return projectItemViewStateList;
                 }
         );
