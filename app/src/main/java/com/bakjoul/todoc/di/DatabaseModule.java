@@ -49,13 +49,13 @@ public class DatabaseModule {
     @Provides
     @Singleton
     public ProjectDao provideProjectDao(@NonNull AppDatabase appDatabase) {
-        return appDatabase.projectDao();
+        return appDatabase.getProjectDao();
     }
 
     @Provides
     @Singleton
     public TaskDao provideTaskDao(@NonNull AppDatabase appDatabase) {
-        return appDatabase.taskDao();
+        return appDatabase.getTaskDao();
     }
 
     @Qualifier

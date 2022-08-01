@@ -29,9 +29,9 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase instance;
 
-    public abstract ProjectDao projectDao();
+    public abstract ProjectDao getProjectDao();
 
-    public abstract TaskDao taskDao();
+    public abstract TaskDao getTaskDao();
 
     public static AppDatabase getInstance(
             @NonNull Application application,
@@ -62,7 +62,7 @@ public abstract class AppDatabase extends RoomDatabase {
             @Override
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                 ioExecutor.execute(() -> {
-                    ProjectDao projectDao = AppDatabase.getInstance(application, ioExecutor).projectDao();
+                    ProjectDao projectDao = AppDatabase.getInstance(application, ioExecutor).getProjectDao();
 
                     projectDao.insert(
                             new Project(
