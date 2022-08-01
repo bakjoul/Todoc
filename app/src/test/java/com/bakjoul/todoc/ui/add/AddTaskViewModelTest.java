@@ -2,7 +2,7 @@ package com.bakjoul.todoc.ui.add;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 
 import android.app.Application;
 
@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.bakjoul.todoc.data.TaskRepository;
 import com.bakjoul.todoc.data.entity.Project;
+import com.bakjoul.todoc.data.entity.Task;
 import com.bakjoul.todoc.ui.ViewEvent;
 import com.bakjoul.todoc.utils.LiveDataTestUtil;
 import com.bakjoul.todoc.utils.TestExecutor;
@@ -52,23 +53,9 @@ public class AddTaskViewModelTest {
     @Test
     public void nominal_case() {
         // When
-        AddTaskViewState addTaskViewState;
-        try {
-            addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
-        } catch (AssertionError assertionError) {
-            assertEquals("LiveData value is null !", assertionError.getMessage());
-            addTaskViewState = null;
-        }
-
+        AddTaskViewState addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
         List<AddTaskProjectItemViewState> addTaskProjectItemViewStateList = LiveDataTestUtil.getValueForTesting(viewModel.getProjectItemsViewState());
-
-        ViewEvent viewEvent;
-        try {
-            viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
-        } catch (AssertionError assertionError) {
-            assertEquals("LiveData value is null !", assertionError.getMessage());
-            viewEvent = null;
-        }
+        ViewEvent viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
 
         // Then
         assertNull(addTaskViewState);
@@ -83,23 +70,9 @@ public class AddTaskViewModelTest {
         projectsLiveData.setValue(new ArrayList<>());
 
         // When
-        AddTaskViewState addTaskViewState;
-        try {
-            addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
-        } catch (AssertionError assertionError) {
-            assertEquals("LiveData value is null !", assertionError.getMessage());
-            addTaskViewState = null;
-        }
-
+        AddTaskViewState addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
         List<AddTaskProjectItemViewState> addTaskProjectItemViewStateList = LiveDataTestUtil.getValueForTesting(viewModel.getProjectItemsViewState());
-
-        ViewEvent viewEvent;
-        try {
-            viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
-        } catch (AssertionError assertionError) {
-            assertEquals("LiveData value is null !", assertionError.getMessage());
-            viewEvent = null;
-        }
+        ViewEvent viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
 
         // Then
         assertNull(addTaskViewState);
@@ -119,8 +92,31 @@ public class AddTaskViewModelTest {
 
         // Then
         assertNull(addTaskViewState);
-        assertTrue(addTaskProjectItemViewStateList.isEmpty());
+        assertEquals(new ArrayList<>(), addTaskProjectItemViewStateList);
         assertNull(viewEvent);
+    }
+
+    @Test
+    public void add_task_with_success() {
+        // Given
+        String taskDescription = "taskDescription";
+        long projectId = 2;
+
+        // When
+        viewModel.onTaskDescriptionChanged(taskDescription);
+        viewModel.onProjectSelected(projectId);
+        viewModel.onAddButtonClicked();
+
+        AddTaskViewState addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
+        ViewEvent viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
+
+        // Then
+        assertEquals(new AddTaskViewState(null, null), addTaskViewState);
+        assertEquals(ViewEvent.DISMISS_ADD_TASK_DIALOG, viewEvent);
+        Mockito.verify(ioExecutor).execute(any());
+        Mockito.verify(taskRepository).addTask(new Task(projectId, taskDescription));
+        Mockito.verify(mainExecutor).execute(any());
+        Mockito.verifyNoMoreInteractions(taskRepository, ioExecutor, mainExecutor);
     }
 
     // region IN
