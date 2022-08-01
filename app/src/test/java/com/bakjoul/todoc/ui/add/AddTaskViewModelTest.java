@@ -5,11 +5,13 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteException;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
+import com.bakjoul.todoc.R;
 import com.bakjoul.todoc.data.TaskRepository;
 import com.bakjoul.todoc.data.entity.Project;
 import com.bakjoul.todoc.data.entity.Task;
@@ -116,7 +118,102 @@ public class AddTaskViewModelTest {
         Mockito.verify(ioExecutor).execute(any());
         Mockito.verify(taskRepository).addTask(new Task(projectId, taskDescription));
         Mockito.verify(mainExecutor).execute(any());
-        Mockito.verifyNoMoreInteractions(taskRepository, ioExecutor, mainExecutor);
+        Mockito.verifyNoMoreInteractions(taskRepository, mainExecutor, ioExecutor);
+    }
+
+    @Test
+    public void add_task_failed_no_task_description() {
+        // Given
+        long projectId = 1;
+
+        // When
+        viewModel.onProjectSelected(projectId);
+        viewModel.onAddButtonClicked();
+
+        AddTaskViewState addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
+        ViewEvent viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
+
+        // Then
+        assertEquals(new AddTaskViewState(application.getString(R.string.error_task_description), null), addTaskViewState);
+        assertNull(viewEvent);
+        Mockito.verifyNoMoreInteractions(taskRepository, mainExecutor, ioExecutor);
+    }
+
+    @Test
+    public void add_task_failed_empty_task_description() {
+        // Given
+        String taskDescription = "";
+        long projectId = 1;
+
+        // When
+        viewModel.onTaskDescriptionChanged(taskDescription);
+        viewModel.onProjectSelected(projectId);
+        viewModel.onAddButtonClicked();
+
+        AddTaskViewState addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
+        ViewEvent viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
+
+        // Then
+        assertEquals(new AddTaskViewState(application.getString(R.string.error_task_description), null), addTaskViewState);
+        assertNull(viewEvent);
+        Mockito.verifyNoMoreInteractions(taskRepository, mainExecutor, ioExecutor);
+    }
+
+    @Test
+    public void add_task_failed_no_project_selected() {
+        // Given
+        String taskDescription = "taskDescription";
+
+        // When
+        viewModel.onTaskDescriptionChanged(taskDescription);
+        viewModel.onAddButtonClicked();
+
+        AddTaskViewState addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
+        ViewEvent viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
+
+        // Then
+        assertEquals(new AddTaskViewState(null, application.getString(R.string.error_project)), addTaskViewState);
+        assertNull(viewEvent);
+        Mockito.verifyNoMoreInteractions(taskRepository, mainExecutor, ioExecutor);
+    }
+
+    @Test
+    public void add_task_failed_empty_fields() {
+        // When
+        viewModel.onAddButtonClicked();
+
+        AddTaskViewState addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
+        ViewEvent viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
+
+        // Then
+        assertEquals(new AddTaskViewState(application.getString(R.string.error_task_description), application.getString(R.string.error_project)), addTaskViewState);
+        assertNull(viewEvent);
+        Mockito.verifyNoMoreInteractions(taskRepository, mainExecutor, ioExecutor);
+    }
+
+    @Test
+    public void add_task_failed_sql_exception() {
+        // Given
+        String taskDescription = "taskDescription";
+        long projectId = 1;
+        SQLiteException sqlException = Mockito.mock(SQLiteException.class);
+        Mockito.doThrow(sqlException).when(taskRepository).addTask(any());
+
+        // When
+        viewModel.onTaskDescriptionChanged(taskDescription);
+        viewModel.onProjectSelected(projectId);
+        viewModel.onAddButtonClicked();
+
+        AddTaskViewState addTaskViewState = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewStateLiveData());
+        ViewEvent viewEvent = LiveDataTestUtil.getValueForTesting(viewModel.getAddTaskViewEvent());
+
+        // Then
+        assertEquals(new AddTaskViewState(null, null), addTaskViewState);
+        assertEquals(ViewEvent.TOAST_ADD_TASK_SQL_EXCEPTION, viewEvent);
+        Mockito.verify(ioExecutor).execute(any());
+        Mockito.verify(taskRepository).addTask(any());
+        Mockito.verify(mainExecutor).execute(any());
+        Mockito.verifyNoMoreInteractions(taskRepository, mainExecutor, ioExecutor);
     }
 
     // region IN

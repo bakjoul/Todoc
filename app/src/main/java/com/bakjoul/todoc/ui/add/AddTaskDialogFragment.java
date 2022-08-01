@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -84,7 +85,16 @@ public class AddTaskDialogFragment extends DialogFragment {
             adapter.addAll(projects);
         });
 
-        viewModel.getAddTaskViewEvent().observe(this, viewEvent -> dismiss());
+        viewModel.getAddTaskViewEvent().observe(this, viewEvent -> {
+            switch (viewEvent) {
+                case DISMISS_ADD_TASK_DIALOG:
+                    dismiss();
+                    break;
+                case TOAST_ADD_TASK_SQL_EXCEPTION:
+                    Toast.makeText(requireContext(), "Impossible d'ajouter la tâche", Toast.LENGTH_LONG).show();
+                    break;
+            }
+        });
 
         return b.getRoot();
     }

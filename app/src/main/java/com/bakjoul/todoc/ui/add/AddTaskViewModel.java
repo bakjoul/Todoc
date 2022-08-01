@@ -108,6 +108,7 @@ public class AddTaskViewModel extends ViewModel {
                     taskRepository.addTask(new Task(form.projectId, form.taskDescription));
                     mainExecutor.execute(() -> addTaskViewEvent.setValue(ViewEvent.DISMISS_ADD_TASK_DIALOG));
                 } catch (SQLiteException e) {
+                    mainExecutor.execute(() -> addTaskViewEvent.setValue(ViewEvent.TOAST_ADD_TASK_SQL_EXCEPTION));
                     e.printStackTrace();
                 }
             });
