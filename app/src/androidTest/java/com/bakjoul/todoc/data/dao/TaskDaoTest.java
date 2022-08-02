@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteException;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
@@ -77,5 +78,12 @@ public class TaskDaoTest {
 
         // Then
         assertTrue(results.isEmpty());
+    }
+
+    @Test(expected = SQLiteException.class)
+    public void should_throw_foreign_key_constraint_failed() {
+        Task task = new Task(4, EXPECTED_TASK_DESCRIPTION);
+
+        taskDao.insert(task);
     }
 }

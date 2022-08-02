@@ -213,7 +213,8 @@ public class AddTaskViewModelTest {
         Mockito.verify(ioExecutor).execute(any());
         Mockito.verify(taskRepository).addTask(any());
         Mockito.verify(mainExecutor).execute(any());
-        Mockito.verifyNoMoreInteractions(taskRepository, mainExecutor, ioExecutor);
+        Mockito.verify(sqlException).printStackTrace();
+        Mockito.verifyNoMoreInteractions(sqlException, taskRepository, mainExecutor, ioExecutor);
     }
 
     // region IN

@@ -3,12 +3,19 @@ package com.bakjoul.todoc.data.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
-@Entity(tableName = "task")
+@Entity(tableName = "task",
+        foreignKeys = @ForeignKey(
+                entity = Project.class,
+                parentColumns = "id",
+                childColumns = "projectId"
+        )
+)
 public class Task {
 
     @PrimaryKey(autoGenerate = true)

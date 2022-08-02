@@ -1,6 +1,7 @@
 package com.bakjoul.todoc.ui.task;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.bakjoul.todoc.data.TaskRepository;
 import com.bakjoul.todoc.data.entity.Project;
 import com.bakjoul.todoc.data.entity.Task;
+import com.bakjoul.todoc.ui.ViewEvent;
 import com.bakjoul.todoc.utils.LiveDataTestUtil;
 import com.bakjoul.todoc.utils.TestExecutor;
 
@@ -147,6 +149,25 @@ public class TaskViewModelTest {
         Mockito.verify(taskRepository).deleteTask(taskId);
         Mockito.verify(ioExecutor).execute(any());
         Mockito.verifyNoMoreInteractions(taskRepository, ioExecutor);
+    }
+
+    @Test
+    public void viewEvent_should_be_null() {
+        // When
+        ViewEvent result = LiveDataTestUtil.getValueForTesting(viewModel.getTaskViewEvent());
+
+        // Then
+        assertNull(result);
+    }
+
+    @Test
+    public void onAddButtonClicked_viewEvent_should_expose_display_add_task_dialog() {
+        // When
+        viewModel.onAddButtonClicked();
+        ViewEvent result = LiveDataTestUtil.getValueForTesting(viewModel.getTaskViewEvent());
+
+        // Then
+        assertEquals(ViewEvent.DISPLAY_ADD_TASK_DIALOG, result);
     }
 
     // region IN
