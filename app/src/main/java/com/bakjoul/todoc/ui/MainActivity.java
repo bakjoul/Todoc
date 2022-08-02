@@ -1,9 +1,10 @@
-package com.bakjoul.todoc;
+package com.bakjoul.todoc.ui;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bakjoul.todoc.R;
 import com.bakjoul.todoc.ui.task.TaskFragment;
 
 import dagger.hilt.android.AndroidEntryPoint;
