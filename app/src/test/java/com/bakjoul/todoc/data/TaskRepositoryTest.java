@@ -34,7 +34,7 @@ public class TaskRepositoryTest {
         Mockito.doReturn(projectsLiveData).when(projectDao).getAllProjects();   // La méthode de l'interface retournera projectsLiveData
 
         // When
-        LiveData<List<Project>> result = projectDao.getAllProjects();
+        LiveData<List<Project>> result = taskRepository.getAllProjects();
 
         // Then
         assertEquals(projectsLiveData, result);
@@ -62,7 +62,7 @@ public class TaskRepositoryTest {
         Mockito.doReturn(tasksLiveData).when(taskDao).getAllTasks();
 
         // When
-        LiveData<List<Task>> result = taskDao.getAllTasks();
+        LiveData<List<Task>> result = taskRepository.getAllTasks();
 
         // Then
         assertEquals(tasksLiveData, result);
