@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.bakjoul.todoc.R;
 import com.bakjoul.todoc.utils.DrawableMatcher;
+import com.bakjoul.todoc.utils.RecyclerViewItemCountAssertion;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,10 +27,13 @@ public class MainActivityTest {
     }
 
     @Test
-    public void test() {
+    public void assertNoTask() {
         onView(allOf(withId(R.id.no_task), isCompletelyDisplayed()))
                 .check(matches(withText(R.string.no_task)))
                 .check(matches(new DrawableMatcher(R.drawable.ic_baseline_work_off_24, DrawableMatcher.TextDrawablePosition.TOP)));
+        onView(allOf(withId(R.id.task_RecyclerView), isCompletelyDisplayed()))
+                .check(new RecyclerViewItemCountAssertion(0));
+
     }
 
 }
