@@ -19,11 +19,13 @@ import static org.hamcrest.Matchers.isA;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.bakjoul.todoc.R;
 import com.bakjoul.todoc.ui.add.AddTaskProjectItemViewState;
+import com.bakjoul.todoc.utils.ClickChildViewWithId;
 import com.bakjoul.todoc.utils.DrawableMatcher;
 import com.bakjoul.todoc.utils.RecyclerViewItemAssertion;
 import com.bakjoul.todoc.utils.RecyclerViewItemCountAssertion;
@@ -45,9 +47,9 @@ public class MainActivityTest {
     }
 
     @Test
-    public void addTask() throws InterruptedException {
+    public void addAndDeleteTask() throws InterruptedException {
         assertNoTask();
-        addTask(TEST_TASK_DESCRIPTION, Project.TARTAMPION);
+        addAndDeleteTask(TEST_TASK_DESCRIPTION, Project.TARTAMPION);
 
         // Check that task was added
         onView(withId(R.id.task_RecyclerView))
@@ -62,11 +64,11 @@ public class MainActivityTest {
                 .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         // Delete previously added task
-/*        onView(withId(R.id.task_RecyclerView))
+        onView(withId(R.id.task_RecyclerView))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
+        Thread.sleep(DELAY);
 
-        Thread.sleep(DELAY);*/
-
+        assertNoTask();
     }
 
     private void assertNoTask() {
@@ -77,7 +79,7 @@ public class MainActivityTest {
                 .check(new RecyclerViewItemCountAssertion(0));
     }
 
-    private void addTask(@NonNull String taskDescription, @NonNull Project project) throws InterruptedException {
+    private void addAndDeleteTask(@NonNull String taskDescription, @NonNull Project project) throws InterruptedException {
         onView(withId(R.id.fab_add)).perform(click());
         onView(withId(R.id.add_task_description_edit)).perform(replaceText(taskDescription));
         closeSoftKeyboard();
