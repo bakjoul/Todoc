@@ -3,11 +3,13 @@ package com.bakjoul.todoc.data;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.bakjoul.todoc.R;
 import com.bakjoul.todoc.data.dao.ProjectDao;
 import com.bakjoul.todoc.data.dao.TaskDao;
 import com.bakjoul.todoc.data.entity.Project;
@@ -66,20 +68,20 @@ public abstract class AppDatabase extends RoomDatabase {
 
                     projectDao.insert(
                             new Project(
-                                    "Projet Tartampion",
-                                    0xFFEADAD1
+                                    application.getString(R.string.project_tartampion),
+                                    ResourcesCompat.getColor(application.getResources(), R.color.project_color_tartampion, null)
                             )
                     );
                     projectDao.insert(
                             new Project(
-                                    "Projet Lucidia",
-                                    0xFFB4CDBA
+                                    application.getString(R.string.project_lucidia),
+                                    ResourcesCompat.getColor(application.getResources(), R.color.project_color_lucidia, null)
                             )
                     );
                     projectDao.insert(
                             new Project(
-                                    "Projet Circus",
-                                    0xFFA3CED2
+                                    application.getString(R.string.project_circus),
+                                    ResourcesCompat.getColor(application.getResources(), R.color.project_color_circus, null)
                             )
                     );
 
