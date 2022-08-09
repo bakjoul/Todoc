@@ -37,9 +37,11 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
-    private static final long DELAY = 2_000;
+    private static final long SLEEP_DURATION = 1_000;
 
-    private static final String TEST_TASK_DESCRIPTION = "Test task description";
+    private static final String FIRST_TASK_DESCRIPTION = "First task description";
+    private static final String SECOND_TASK_DESCRIPTION = "Second task description";
+    private static final String THIRD_TASK_DESCRIPTION = "Third task description";
 
     @Before
     public void setUp() {
@@ -49,11 +51,11 @@ public class MainActivityTest {
     @Test
     public void addAndDeleteTask() throws InterruptedException {
         assertNoTask();
-        addAndDeleteTask(TEST_TASK_DESCRIPTION, Project.TARTAMPION);
+        addTask(FIRST_TASK_DESCRIPTION, Project.TARTAMPION);
 
         // Check that task was added
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(0, R.id.task_item_description, withText(TEST_TASK_DESCRIPTION)));
+                .check(new RecyclerViewItemAssertion(0, R.id.task_item_description, withText(FIRST_TASK_DESCRIPTION)));
 
         // Check that recycler view contains only one element
         onView(withId(R.id.task_RecyclerView))
@@ -66,9 +68,78 @@ public class MainActivityTest {
         // Delete previously added task
         onView(withId(R.id.task_RecyclerView))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
-        Thread.sleep(DELAY);
+        Thread.sleep(SLEEP_DURATION);
 
         assertNoTask();
+    }
+
+    @Test
+    public void sortTasks() throws InterruptedException {
+        addTask(FIRST_TASK_DESCRIPTION, Project.TARTAMPION);
+        addTask(SECOND_TASK_DESCRIPTION, Project.LUCIDIA);
+        addTask(THIRD_TASK_DESCRIPTION, Project.CIRCUS);
+
+        // Sort alphabetically by project
+        onView(withId(R.id.action_filter)).perform(click());
+        onView(withText(R.string.sorting_alphabetic)).perform(click());
+        Thread.sleep(SLEEP_DURATION);
+
+        // Check that tasks are sorted by project alphabetically
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(0, R.id.task_item_project, withText(Project.CIRCUS.projectNameStringRes)));
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(1, R.id.task_item_project, withText(Project.LUCIDIA.projectNameStringRes)));
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(2, R.id.task_item_project, withText(Project.TARTAMPION.projectNameStringRes)));
+
+        // Sort alphabetically inverted by project
+        onView(withId(R.id.action_filter)).perform(click());
+        onView(withText(R.string.sorting_alphabetic_inverted)).perform(click());
+        Thread.sleep(SLEEP_DURATION);
+
+        // Check that tasks are sorted by project inverted alphabetically
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(0, R.id.task_item_project, withText(Project.TARTAMPION.projectNameStringRes)));
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(1, R.id.task_item_project, withText(Project.LUCIDIA.projectNameStringRes)));
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(2, R.id.task_item_project, withText(Project.CIRCUS.projectNameStringRes)));
+
+        // Sort by newest tasks added first
+        onView(withId(R.id.action_filter)).perform(click());
+        onView(withText(R.string.sorting_newest_first)).perform(click());
+        Thread.sleep(SLEEP_DURATION);
+
+        // Check that tasks are sorted by newest first
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(0, R.id.task_item_description, withText(THIRD_TASK_DESCRIPTION)));
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(1, R.id.task_item_description, withText(SECOND_TASK_DESCRIPTION)));
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(2, R.id.task_item_description, withText(FIRST_TASK_DESCRIPTION)));
+
+        // Sort by oldest tasks added first
+        onView(withId(R.id.action_filter)).perform(click());
+        onView(withText(R.string.sorting_oldest_first)).perform(click());
+        Thread.sleep(SLEEP_DURATION);
+
+        // Check that tasks are sorted by oldest first
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(0, R.id.task_item_description, withText(FIRST_TASK_DESCRIPTION)));
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(1, R.id.task_item_description, withText(SECOND_TASK_DESCRIPTION)));
+        onView(withId(R.id.task_RecyclerView))
+                .check(new RecyclerViewItemAssertion(2, R.id.task_item_description, withText(THIRD_TASK_DESCRIPTION)));
+
+        onView(withId(R.id.task_RecyclerView))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
+        Thread.sleep(SLEEP_DURATION);
+        onView(withId(R.id.task_RecyclerView))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
+        Thread.sleep(SLEEP_DURATION);
+        onView(withId(R.id.task_RecyclerView))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
+        Thread.sleep(SLEEP_DURATION);
     }
 
     private void assertNoTask() {
@@ -79,7 +150,7 @@ public class MainActivityTest {
                 .check(new RecyclerViewItemCountAssertion(0));
     }
 
-    private void addAndDeleteTask(@NonNull String taskDescription, @NonNull Project project) throws InterruptedException {
+    private void addTask(@NonNull String taskDescription, @NonNull Project project) throws InterruptedException {
         onView(withId(R.id.fab_add)).perform(click());
         onView(withId(R.id.add_task_description_edit)).perform(replaceText(taskDescription));
         closeSoftKeyboard();
@@ -92,7 +163,7 @@ public class MainActivityTest {
                 .perform(scrollTo(), click());
         onView(withId(R.id.add_task_add_button)).perform(click());
 
-        Thread.sleep(DELAY);
+        Thread.sleep(SLEEP_DURATION);
     }
 
     private enum Project {
@@ -108,5 +179,4 @@ public class MainActivityTest {
             this.projectNameStringRes = projectNameStringRes;
         }
     }
-
 }
