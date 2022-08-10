@@ -61,6 +61,8 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
     // LiveData tests
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
+
+    androidTestUtil 'androidx.test:orchestrator:1.4.1'
 }
 
 def openReport(htmlOutDir) {
