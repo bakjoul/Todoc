@@ -45,8 +45,8 @@ public class AddTaskViewState {
     @Override
     public String toString() {
         return "AddTaskViewState{" +
-                "taskDescriptionError='" + taskDescriptionError + '\'' +
-                ", projectError='" + projectError + '\'' +
-                '}';
+            "taskDescriptionError='" + taskDescriptionError + '\'' +
+            ", projectError='" + projectError + '\'' +
+            '}';
     }
 }

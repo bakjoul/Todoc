@@ -38,12 +38,12 @@ public class TaskDaoTest {
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
         appDatabase = Room
-                .inMemoryDatabaseBuilder(context, AppDatabase.class)
-                .build();
+            .inMemoryDatabaseBuilder(context, AppDatabase.class)
+            .build();
         taskDao = appDatabase.getTaskDao();
 
         appDatabase.getProjectDao().insert(
-                new Project(1, "Project 1", 1)
+            new Project(1, "Project 1", 1)
         );
     }
 

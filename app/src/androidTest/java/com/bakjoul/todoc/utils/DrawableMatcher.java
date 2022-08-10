@@ -31,7 +31,7 @@ public class DrawableMatcher extends TypeSafeMatcher<View> {
 
         Bitmap expectedBitmap = getBitmap(view.getContext().getDrawable(id));
         return getBitmap(((TextView) view).getCompoundDrawables()[drawablePosition.ordinal()])
-                .sameAs(expectedBitmap);
+            .sameAs(expectedBitmap);
 
     }
 

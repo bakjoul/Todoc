@@ -61,22 +61,22 @@ public class AddTaskViewModel extends ViewModel {
         this.mainExecutor = mainExecutor;
 
         projectItemsViewState = Transformations.map(
-                taskRepository.getAllProjects(), projects -> {
-                    List<AddTaskProjectItemViewState> projectItemViewStateList = new ArrayList<>();
-                    if (projects != null) {
-                        for (Project project : projects) {
-                            projectItemViewStateList.add(
-                                    new AddTaskProjectItemViewState(
-                                            project.getId(),
-                                            project.getColor(),
-                                            project.getName()
-                                    )
-                            );
-                        }
+            taskRepository.getAllProjects(), projects -> {
+                List<AddTaskProjectItemViewState> projectItemViewStateList = new ArrayList<>();
+                if (projects != null) {
+                    for (Project project : projects) {
+                        projectItemViewStateList.add(
+                            new AddTaskProjectItemViewState(
+                                project.getId(),
+                                project.getColor(),
+                                project.getName()
+                            )
+                        );
                     }
-
-                    return projectItemViewStateList;
                 }
+
+                return projectItemViewStateList;
+            }
         );
     }
 
@@ -136,18 +136,18 @@ public class AddTaskViewModel extends ViewModel {
         }
 
         addTaskViewStateLiveData.setValue(
-                new AddTaskViewState(
-                        taskDescriptionError,
-                        projectError
-                )
+            new AddTaskViewState(
+                taskDescriptionError,
+                projectError
+            )
         );
 
         Form result = null;
 
         if (areInputsOk) {
             result = new Form(
-                    taskDescription,
-                    projectId
+                taskDescription,
+                projectId
             );
         }
         return result;

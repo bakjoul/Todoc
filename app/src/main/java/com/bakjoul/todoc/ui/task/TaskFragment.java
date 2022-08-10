@@ -37,37 +37,32 @@ public class TaskFragment extends Fragment implements TaskOnDeleteClickedListene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        TaskFragmentBinding b = TaskFragmentBinding.inflate(inflater, container, false);
+        TaskFragmentBinding binding = TaskFragmentBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         TaskAdapter adapter = new TaskAdapter(this);
-        b.taskRecyclerView.setAdapter(adapter);
+        binding.taskRecyclerView.setAdapter(adapter);
 
-        b.fabAdd.setOnClickListener(view -> viewModel.onAddButtonClicked());
+        binding.fabAdd.setOnClickListener(view -> viewModel.onAddButtonClicked());
 
         viewModel.getTaskViewStateLiveData().observe(getViewLifecycleOwner(), taskViewState -> {
                 adapter.submitList(taskViewState.getTaskViewStateItems());
                 if (taskViewState.isEmptyStateVisible()) {
-                    b.noTask.setVisibility(View.VISIBLE);
+                    binding.noTask.setVisibility(View.VISIBLE);
                 } else {
-                    b.noTask.setVisibility(View.GONE);
+                    binding.noTask.setVisibility(View.GONE);
                 }
             }
         );
 
         viewModel.getTaskViewEvent().observe(getViewLifecycleOwner(), viewEvent -> {
             FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-            Fragment prev;
             if (viewEvent == ViewEvent.DISPLAY_ADD_TASK_DIALOG) {
-                prev = getParentFragmentManager().findFragmentByTag(TAG_ADD_TASK_DIALOG);
-                if (prev == null) {
-                    ft.addToBackStack(null);
-                    AddTaskDialogFragment.newInstance().show(ft, TAG_ADD_TASK_DIALOG);
-                }
+                AddTaskDialogFragment.newInstance().show(ft, TAG_ADD_TASK_DIALOG);
             }
         });
 
-        return b.getRoot();
+        return binding.getRoot();
     }
 
     @Override

@@ -30,8 +30,8 @@ public enum TaskSortingType {
     @Override
     public String toString() {
         return "TaskSortingType{" +
-                "comparator=" + comparator +
-                '}';
+            "comparator=" + comparator +
+            '}';
     }
 
     private static class TaskAZComparator implements Comparator<Task> {

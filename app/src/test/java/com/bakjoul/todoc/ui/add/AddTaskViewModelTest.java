@@ -233,11 +233,11 @@ public class AddTaskViewModelTest {
         List<AddTaskProjectItemViewState> addTaskProjectItemViewStateList = new ArrayList<>();
         for (Project p : projects) {
             addTaskProjectItemViewStateList.add(
-                    new AddTaskProjectItemViewState(
-                            p.getId(),
-                            p.getColor(),
-                            p.getName()
-                    )
+                new AddTaskProjectItemViewState(
+                    p.getId(),
+                    p.getColor(),
+                    p.getName()
+                )
             );
         }
         return addTaskProjectItemViewStateList;

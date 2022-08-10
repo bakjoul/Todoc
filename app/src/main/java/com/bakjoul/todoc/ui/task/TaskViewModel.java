@@ -46,13 +46,13 @@ public class TaskViewModel extends ViewModel {
         LiveData<List<Project>> projectLiveData = taskRepository.getAllProjects();
 
         taskViewStateMediatorLiveData.addSource(taskLiveData, tasks ->
-                combine(tasks, taskSortingTypeMutableLiveData.getValue(), projectLiveData.getValue())
+            combine(tasks, taskSortingTypeMutableLiveData.getValue(), projectLiveData.getValue())
         );
         taskViewStateMediatorLiveData.addSource(taskSortingTypeMutableLiveData, taskSortingType ->
-                combine(taskLiveData.getValue(), taskSortingType, projectLiveData.getValue())
+            combine(taskLiveData.getValue(), taskSortingType, projectLiveData.getValue())
         );
         taskViewStateMediatorLiveData.addSource(projectLiveData, projects ->
-                combine(taskLiveData.getValue(), taskSortingTypeMutableLiveData.getValue(), projects)
+            combine(taskLiveData.getValue(), taskSortingTypeMutableLiveData.getValue(), projects)
         );
 
     }
@@ -72,22 +72,22 @@ public class TaskViewModel extends ViewModel {
             for (Project project : projects) {
                 if (task.getProjectId() == project.getId()) {
                     taskViewStateItemList.add(
-                            new TaskViewStateItem(
-                                    task.getId(),
-                                    project.getColor(),
-                                    task.getTaskDescription(),
-                                    project.getName()
-                            )
+                        new TaskViewStateItem(
+                            task.getId(),
+                            project.getColor(),
+                            task.getTaskDescription(),
+                            project.getName()
+                        )
                     );
                     break;
                 }
             }
         }
         taskViewStateMediatorLiveData.setValue(
-                new TaskViewState(
-                        taskViewStateItemList,
-                        taskViewStateItemList.isEmpty()
-                )
+            new TaskViewState(
+                taskViewStateItemList,
+                taskViewStateItemList.isEmpty()
+            )
         );
     }
 

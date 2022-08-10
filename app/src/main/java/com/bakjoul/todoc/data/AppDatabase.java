@@ -18,12 +18,12 @@ import com.bakjoul.todoc.data.entity.Task;
 import java.util.concurrent.Executor;
 
 @Database(
-        entities = {
-                Project.class,
-                Task.class
-        },
-        version = 1,
-        exportSchema = false
+    entities = {
+        Project.class,
+        Task.class
+    },
+    version = 1,
+    exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -36,8 +36,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract TaskDao getTaskDao();
 
     public static AppDatabase getInstance(
-            @NonNull Application application,
-            @NonNull Executor ioExecutor
+        @NonNull Application application,
+        @NonNull Executor ioExecutor
     ) {
         if (instance == null) {
             synchronized (AppDatabase.class) {
@@ -51,13 +51,13 @@ public abstract class AppDatabase extends RoomDatabase {
 
     @NonNull
     private static AppDatabase create(
-            @NonNull Application application,
-            @NonNull Executor ioExecutor
+        @NonNull Application application,
+        @NonNull Executor ioExecutor
     ) {
         Builder<AppDatabase> builder = Room.databaseBuilder(
-                application,
-                AppDatabase.class,
-                DATABASE_NAME
+            application,
+            AppDatabase.class,
+            DATABASE_NAME
         );
 
         builder.addCallback(new Callback() {
@@ -67,33 +67,23 @@ public abstract class AppDatabase extends RoomDatabase {
                     ProjectDao projectDao = AppDatabase.getInstance(application, ioExecutor).getProjectDao();
 
                     projectDao.insert(
-                            new Project(
-                                    application.getString(R.string.project_tartampion),
-                                    ResourcesCompat.getColor(application.getResources(), R.color.project_color_tartampion, null)
-                            )
+                        new Project(
+                            application.getString(R.string.project_tartampion),
+                            ResourcesCompat.getColor(application.getResources(), R.color.project_color_tartampion, null)
+                        )
                     );
                     projectDao.insert(
-                            new Project(
-                                    application.getString(R.string.project_lucidia),
-                                    ResourcesCompat.getColor(application.getResources(), R.color.project_color_lucidia, null)
-                            )
+                        new Project(
+                            application.getString(R.string.project_lucidia),
+                            ResourcesCompat.getColor(application.getResources(), R.color.project_color_lucidia, null)
+                        )
                     );
                     projectDao.insert(
-                            new Project(
-                                    application.getString(R.string.project_circus),
-                                    ResourcesCompat.getColor(application.getResources(), R.color.project_color_circus, null)
-                            )
+                        new Project(
+                            application.getString(R.string.project_circus),
+                            ResourcesCompat.getColor(application.getResources(), R.color.project_color_circus, null)
+                        )
                     );
-
-/*                    TaskDao taskDao = AppDatabase.getInstance(application, ioExecutor).taskDao();
-
-                    for (int i = 0; i < 10; i++) {
-                        Task task = new Task(
-                                (i % 3) + 1,
-                                "Task description #" + i
-                        );
-                        taskDao.insert(task);
-                    }*/
                 });
             }
         });

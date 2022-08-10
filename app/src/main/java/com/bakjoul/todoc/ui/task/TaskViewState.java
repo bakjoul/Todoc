@@ -40,8 +40,8 @@ public class TaskViewState {
     @Override
     public String toString() {
         return "TaskViewState{" +
-                "taskViewStateItems=" + taskViewStateItems +
-                ", isEmptyStateVisible=" + isEmptyStateVisible +
-                '}';
+            "taskViewStateItems=" + taskViewStateItems +
+            ", isEmptyStateVisible=" + isEmptyStateVisible +
+            '}';
     }
 }

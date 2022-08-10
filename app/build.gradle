@@ -62,6 +62,7 @@ dependencies {
     // LiveData tests
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
 
+    // Orchestrator
     androidTestUtil 'androidx.test:orchestrator:1.4.1'
 }
 

@@ -201,12 +201,12 @@ public class TaskViewModelTest {
             for (Task t : tasks) {
                 if (t.getProjectId() == p.getId()) {
                     taskViewStateItemList.add(
-                            new TaskViewStateItem(
-                                    t.getId(),
-                                    p.getColor(),
-                                    t.getTaskDescription(),
-                                    p.getName()
-                            )
+                        new TaskViewStateItem(
+                            t.getId(),
+                            p.getColor(),
+                            t.getTaskDescription(),
+                            p.getName()
+                        )
                     );
                 }
             }

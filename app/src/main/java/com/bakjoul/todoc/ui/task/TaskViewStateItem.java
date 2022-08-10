@@ -48,21 +48,22 @@ public class TaskViewStateItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TaskViewStateItem that = (TaskViewStateItem) o;
-        return taskId == that.taskId && projectColor == that.projectColor && taskDescription.equals(that.taskDescription);
+        return taskId == that.taskId && projectColor == that.projectColor && taskDescription.equals(that.taskDescription) && project.equals(that.project);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(taskId, projectColor, taskDescription);
+        return Objects.hash(taskId, projectColor, taskDescription, project);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "TaskViewState{" +
-                "taskId=" + taskId +
-                ", projectColor=" + projectColor +
-                ", taskDescription='" + taskDescription + '\'' +
-                '}';
+        return "TaskViewStateItem{" +
+            "taskId=" + taskId +
+            ", projectColor=" + projectColor +
+            ", taskDescription='" + taskDescription + '\'' +
+            ", project='" + project + '\'' +
+            '}';
     }
 }

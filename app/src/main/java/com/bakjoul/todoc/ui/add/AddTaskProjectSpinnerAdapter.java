@@ -30,14 +30,14 @@ public class AddTaskProjectSpinnerAdapter extends ArrayAdapter<AddTaskProjectIte
     }
 
     public View getCustomView(int position, @NonNull ViewGroup parent) {
-        AddTaskProjectSpinnerItemBinding b = AddTaskProjectSpinnerItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        AddTaskProjectSpinnerItemBinding binding = AddTaskProjectSpinnerItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
 
         AddTaskProjectItemViewState item = getItem(position);
 
-        b.addTaskSpinnerItemProjectColor.setColorFilter(item.getProjectColor());
-        b.addTaskSpinnerProjectName.setText(item.getProjectName());
+        binding.addTaskSpinnerItemProjectColor.setColorFilter(item.getProjectColor());
+        binding.addTaskSpinnerProjectName.setText(item.getProjectName());
 
-        return b.getRoot();
+        return binding.getRoot();
     }
 
     @NonNull

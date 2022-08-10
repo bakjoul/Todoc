@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bakjoul.todoc.R;
 import com.bakjoul.todoc.databinding.AddTaskDialogBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -47,16 +48,16 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        AddTaskDialogBinding b = AddTaskDialogBinding.inflate(inflater, container, false);
+        AddTaskDialogBinding binding = AddTaskDialogBinding.inflate(inflater, container, false);
 
         AddTaskViewModel viewModel = new ViewModelProvider(this).get(AddTaskViewModel.class);
 
         AddTaskProjectSpinnerAdapter adapter = new AddTaskProjectSpinnerAdapter(requireContext());
-        b.addTaskProjectSpinnerActv.setAdapter(adapter);
-        b.addTaskProjectSpinnerActv.setOnItemClickListener((adapterView, view, i, l) ->
-                viewModel.onProjectSelected(adapter.getItem(i).getProjectId()));
+        binding.addTaskProjectSpinnerActv.setAdapter(adapter);
+        binding.addTaskProjectSpinnerActv.setOnItemClickListener((adapterView, view, i, l) ->
+            viewModel.onProjectSelected(adapter.getItem(i).getProjectId()));
 
-        b.addTaskDescriptionEdit.addTextChangedListener(new TextWatcher() {
+        binding.addTaskDescriptionEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -73,11 +74,11 @@ public class AddTaskDialogFragment extends DialogFragment {
             }
         });
 
-        b.addTaskAddButton.setOnClickListener(view -> viewModel.onAddButtonClicked());
+        binding.addTaskAddButton.setOnClickListener(view -> viewModel.onAddButtonClicked());
 
         viewModel.getAddTaskViewStateLiveData().observe(this, addTaskViewState -> {
-            b.addTaskDescription.setError(addTaskViewState.getTaskDescriptionError());
-            b.addTaskProjectSpinnerLayout.setError(addTaskViewState.getProjectError());
+            binding.addTaskDescription.setError(addTaskViewState.getTaskDescriptionError());
+            binding.addTaskProjectSpinnerLayout.setError(addTaskViewState.getProjectError());
         });
 
         viewModel.getProjectItemsViewState().observe(this, projects -> {
@@ -91,11 +92,11 @@ public class AddTaskDialogFragment extends DialogFragment {
                     dismiss();
                     break;
                 case TOAST_ADD_TASK_SQL_EXCEPTION:
-                    Toast.makeText(requireContext(), "Impossible d'ajouter la tâche", Toast.LENGTH_LONG).show();
+                    Toast.makeText(requireContext(), R.string.toast_cannot_add_task, Toast.LENGTH_LONG).show();
                     break;
             }
         });
 
-        return b.getRoot();
+        return binding.getRoot();
     }
 }

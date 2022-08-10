@@ -10,11 +10,11 @@ import androidx.room.PrimaryKey;
 import java.util.Objects;
 
 @Entity(tableName = "task",
-        foreignKeys = @ForeignKey(
-                entity = Project.class,
-                parentColumns = "id",
-                childColumns = "projectId"
-        )
+    foreignKeys = @ForeignKey(
+        entity = Project.class,
+        parentColumns = "id",
+        childColumns = "projectId"
+    )
 )
 public class Task {
 
@@ -68,9 +68,9 @@ public class Task {
     @Override
     public String toString() {
         return "Task{" +
-                "id=" + id +
-                ", projectId=" + projectId +
-                ", taskDescription='" + taskDescription + '\'' +
-                '}';
+            "id=" + id +
+            ", projectId=" + projectId +
+            ", taskDescription='" + taskDescription + '\'' +
+            '}';
     }
 }

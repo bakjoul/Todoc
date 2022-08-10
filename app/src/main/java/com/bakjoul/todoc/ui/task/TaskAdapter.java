@@ -23,8 +23,7 @@ public class TaskAdapter extends ListAdapter<TaskViewStateItem, TaskAdapter.View
     @NonNull
     @Override
     public TaskAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TaskItemBinding b = TaskItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolder(b);
+        return new ViewHolder(TaskItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -34,19 +33,19 @@ public class TaskAdapter extends ListAdapter<TaskViewStateItem, TaskAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TaskItemBinding b;
+        private final TaskItemBinding binding;
 
         public ViewHolder(@NonNull TaskItemBinding binding) {
             super(binding.getRoot());
-            this.b = binding;
+            this.binding = binding;
         }
 
         public void bind(@NonNull TaskViewStateItem taskViewStateItem, @NonNull TaskOnDeleteClickedListener listener) {
-            b.taskItemProjectColor.setColorFilter(taskViewStateItem.getProjectColor());
-            b.taskItemDescription.setText(taskViewStateItem.getTaskDescription());
-            b.taskItemProject.setText(taskViewStateItem.getProject());
+            binding.taskItemProjectColor.setColorFilter(taskViewStateItem.getProjectColor());
+            binding.taskItemDescription.setText(taskViewStateItem.getTaskDescription());
+            binding.taskItemProject.setText(taskViewStateItem.getProject());
 
-            b.taskItemDelete.setOnClickListener(view -> listener.onDeleteTaskButtonClick(taskViewStateItem.getTaskId()));
+            binding.taskItemDelete.setOnClickListener(view -> listener.onDeleteTaskButtonClick(taskViewStateItem.getTaskId()));
         }
     }
 
@@ -54,7 +53,7 @@ public class TaskAdapter extends ListAdapter<TaskViewStateItem, TaskAdapter.View
 
         @Override
         public boolean areItemsTheSame(@NonNull TaskViewStateItem oldItem, @NonNull TaskViewStateItem newItem) {
-            return oldItem.getTaskDescription().equals(newItem.getTaskDescription());
+            return oldItem.getTaskId() == newItem.getTaskId();
         }
 
         @Override

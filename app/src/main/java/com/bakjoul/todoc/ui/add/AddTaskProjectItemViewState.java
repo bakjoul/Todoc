@@ -51,9 +51,9 @@ public class AddTaskProjectItemViewState {
     @Override
     public String toString() {
         return "AddTaskProjectItemViewState{" +
-                "projectId=" + projectId +
-                ", projectColor=" + projectColor +
-                ", projectName='" + projectName + '\'' +
-                '}';
+            "projectId=" + projectId +
+            ", projectColor=" + projectColor +
+            ", projectName='" + projectName + '\'' +
+            '}';
     }
 }

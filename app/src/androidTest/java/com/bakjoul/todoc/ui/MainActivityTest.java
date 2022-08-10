@@ -55,19 +55,19 @@ public class MainActivityTest {
 
         // Check that task was added
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(0, R.id.task_item_description, withText(FIRST_TASK_DESCRIPTION)));
+            .check(new RecyclerViewItemAssertion(0, R.id.task_item_description, withText(FIRST_TASK_DESCRIPTION)));
 
         // Check that recycler view contains only one element
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemCountAssertion(1));
+            .check(new RecyclerViewItemCountAssertion(1));
 
         // Check that no task TextView is not displayed
         onView(withId(R.id.no_task))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         // Delete previously added task
         onView(withId(R.id.task_RecyclerView))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
+            .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
         Thread.sleep(SLEEP_DURATION);
 
         assertNoTask();
@@ -86,11 +86,11 @@ public class MainActivityTest {
 
         // Check that tasks are sorted by project alphabetically
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(0, R.id.task_item_project, withText(Project.CIRCUS.projectNameStringRes)));
+            .check(new RecyclerViewItemAssertion(0, R.id.task_item_project, withText(Project.CIRCUS.projectNameStringRes)));
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(1, R.id.task_item_project, withText(Project.LUCIDIA.projectNameStringRes)));
+            .check(new RecyclerViewItemAssertion(1, R.id.task_item_project, withText(Project.LUCIDIA.projectNameStringRes)));
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(2, R.id.task_item_project, withText(Project.TARTAMPION.projectNameStringRes)));
+            .check(new RecyclerViewItemAssertion(2, R.id.task_item_project, withText(Project.TARTAMPION.projectNameStringRes)));
 
         // Sort alphabetically inverted by project
         onView(withId(R.id.action_filter)).perform(click());
@@ -99,11 +99,11 @@ public class MainActivityTest {
 
         // Check that tasks are sorted by project inverted alphabetically
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(0, R.id.task_item_project, withText(Project.TARTAMPION.projectNameStringRes)));
+            .check(new RecyclerViewItemAssertion(0, R.id.task_item_project, withText(Project.TARTAMPION.projectNameStringRes)));
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(1, R.id.task_item_project, withText(Project.LUCIDIA.projectNameStringRes)));
+            .check(new RecyclerViewItemAssertion(1, R.id.task_item_project, withText(Project.LUCIDIA.projectNameStringRes)));
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(2, R.id.task_item_project, withText(Project.CIRCUS.projectNameStringRes)));
+            .check(new RecyclerViewItemAssertion(2, R.id.task_item_project, withText(Project.CIRCUS.projectNameStringRes)));
 
         // Sort by newest tasks added first
         onView(withId(R.id.action_filter)).perform(click());
@@ -112,11 +112,11 @@ public class MainActivityTest {
 
         // Check that tasks are sorted by newest first
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(0, R.id.task_item_description, withText(THIRD_TASK_DESCRIPTION)));
+            .check(new RecyclerViewItemAssertion(0, R.id.task_item_description, withText(THIRD_TASK_DESCRIPTION)));
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(1, R.id.task_item_description, withText(SECOND_TASK_DESCRIPTION)));
+            .check(new RecyclerViewItemAssertion(1, R.id.task_item_description, withText(SECOND_TASK_DESCRIPTION)));
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(2, R.id.task_item_description, withText(FIRST_TASK_DESCRIPTION)));
+            .check(new RecyclerViewItemAssertion(2, R.id.task_item_description, withText(FIRST_TASK_DESCRIPTION)));
 
         // Sort by oldest tasks added first
         onView(withId(R.id.action_filter)).perform(click());
@@ -125,29 +125,29 @@ public class MainActivityTest {
 
         // Check that tasks are sorted by oldest first
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(0, R.id.task_item_description, withText(FIRST_TASK_DESCRIPTION)));
+            .check(new RecyclerViewItemAssertion(0, R.id.task_item_description, withText(FIRST_TASK_DESCRIPTION)));
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(1, R.id.task_item_description, withText(SECOND_TASK_DESCRIPTION)));
+            .check(new RecyclerViewItemAssertion(1, R.id.task_item_description, withText(SECOND_TASK_DESCRIPTION)));
         onView(withId(R.id.task_RecyclerView))
-                .check(new RecyclerViewItemAssertion(2, R.id.task_item_description, withText(THIRD_TASK_DESCRIPTION)));
+            .check(new RecyclerViewItemAssertion(2, R.id.task_item_description, withText(THIRD_TASK_DESCRIPTION)));
 
         onView(withId(R.id.task_RecyclerView))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
+            .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
         Thread.sleep(SLEEP_DURATION);
         onView(withId(R.id.task_RecyclerView))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
+            .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
         Thread.sleep(SLEEP_DURATION);
         onView(withId(R.id.task_RecyclerView))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
+            .perform(RecyclerViewActions.actionOnItemAtPosition(0, new ClickChildViewWithId(R.id.task_item_delete)));
         Thread.sleep(SLEEP_DURATION);
     }
 
     private void assertNoTask() {
         onView(allOf(withId(R.id.no_task), isCompletelyDisplayed()))
-                .check(matches(withText(R.string.no_task)))
-                .check(matches(new DrawableMatcher(R.drawable.ic_baseline_work_off_24, DrawableMatcher.TextDrawablePosition.TOP)));
+            .check(matches(withText(R.string.no_task)))
+            .check(matches(new DrawableMatcher(R.drawable.ic_baseline_work_off_24, DrawableMatcher.TextDrawablePosition.TOP)));
         onView(allOf(withId(R.id.task_RecyclerView), isCompletelyDisplayed()))
-                .check(new RecyclerViewItemCountAssertion(0));
+            .check(new RecyclerViewItemCountAssertion(0));
     }
 
     private void addTask(@NonNull String taskDescription, @NonNull Project project) throws InterruptedException {
@@ -157,10 +157,10 @@ public class MainActivityTest {
 
         onView(withId(R.id.add_task_project_spinner_actv)).perform(click());
         onData(isA(AddTaskProjectItemViewState.class))
-                .inRoot(isPlatformPopup())
-                .atPosition(project.spinnerIndex)
-                .check(matches(withChild(withText(project.projectNameStringRes))))
-                .perform(scrollTo(), click());
+            .inRoot(isPlatformPopup())
+            .atPosition(project.spinnerIndex)
+            .check(matches(withChild(withText(project.projectNameStringRes))))
+            .perform(scrollTo(), click());
         onView(withId(R.id.add_task_add_button)).perform(click());
 
         Thread.sleep(SLEEP_DURATION);

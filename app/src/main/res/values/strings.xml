@@ -17,4 +17,5 @@
     <string name="project_tartampion">Projet Tartampion</string>
     <string name="project_lucidia">Projet Lucidia</string>
     <string name="project_circus">Projet Circus</string>
+    <string name="toast_cannot_add_task">Impossible d\'ajouter la tâche</string>
 </resources>
