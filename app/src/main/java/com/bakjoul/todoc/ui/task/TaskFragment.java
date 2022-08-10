@@ -46,13 +46,13 @@ public class TaskFragment extends Fragment implements TaskOnDeleteClickedListene
         b.fabAdd.setOnClickListener(view -> viewModel.onAddButtonClicked());
 
         viewModel.getTaskViewStateLiveData().observe(getViewLifecycleOwner(), taskViewState -> {
-                    adapter.submitList(taskViewState.getTaskViewStateItems());
-                    if (taskViewState.isEmptyStateVisible()) {
-                        b.noTask.setVisibility(View.VISIBLE);
-                    } else {
-                        b.noTask.setVisibility(View.GONE);
-                    }
+                adapter.submitList(taskViewState.getTaskViewStateItems());
+                if (taskViewState.isEmptyStateVisible()) {
+                    b.noTask.setVisibility(View.VISIBLE);
+                } else {
+                    b.noTask.setVisibility(View.GONE);
                 }
+            }
         );
 
         viewModel.getTaskViewEvent().observe(getViewLifecycleOwner(), viewEvent -> {
