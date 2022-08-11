@@ -1,0 +1,163 @@
+@startuml
+left to right direction
+
+package "Task"{
+class TaskFragment {
+- String TAG_ADD_TASK_DIALOG
+- TaskViewModel viewModel
++ {static} TaskFragment newInstance()
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
++ void onDeleteTaskButtonClick(long)
++ void onCreateOptionsMenu(Menu,MenuInflater)
++ boolean onOptionsItemSelected(MenuItem)
+}
+class TaskViewModel {
+- TaskRepository taskRepository
+- Executor ioExecutor
+- MutableLiveData<TaskSortingType> taskSortingTypeMutableLiveData
+- MediatorLiveData<TaskViewState> taskViewStateMediatorLiveData
+- SingleLiveEvent<ViewEvent> taskViewEvent
+- void combine(List<Task>,TaskSortingType,List<Project>)
++ void onSortingTypeChanged(TaskSortingType)
++ LiveData<TaskViewState> getTaskViewStateLiveData()
++ SingleLiveEvent<ViewEvent> getTaskViewEvent()
++ void onAddButtonClicked()
++ void onDeleteTaskButtonClicked(long)
+}
+class TaskViewState {
+- List<TaskViewStateItem> taskViewStateItems
+- boolean isEmptyStateVisible
++ List<TaskViewStateItem> getTaskViewStateItems()
++ boolean isEmptyStateVisible()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+}
+
+package "AddTask" {
+class AddTaskDialogFragment {
++ {static} AddTaskDialogFragment newInstance()
++ Dialog onCreateDialog(Bundle)
++ View onCreateView(LayoutInflater,ViewGroup,Bundle)
+}
+class AddTaskViewModel {
+- Application application
+- TaskRepository taskRepository
+- Executor ioExecutor
+- Executor mainExecutor
+- MutableLiveData<AddTaskViewState> addTaskViewStateLiveData
+- LiveData<List<AddTaskProjectItemViewState>> projectItemsViewState
+- SingleLiveEvent<ViewEvent> addTaskViewEvent
+- String taskDescription
+- Long projectId
++ LiveData<AddTaskViewState> getAddTaskViewStateLiveData()
++ LiveData<List<AddTaskProjectItemViewState>> getProjectItemsViewState()
++ SingleLiveEvent<ViewEvent> getAddTaskViewEvent()
++ void onTaskDescriptionChanged(String)
++ void onProjectSelected(long)
++ void onAddButtonClicked()
+- Form getFormattedInputs()
+}
+class AddTaskViewState {
+- String taskDescriptionError
+- String projectError
++ String getTaskDescriptionError()
++ String getProjectError()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+}
+
+package "Database"{
+abstract class AppDatabase {
+- {static} String DATABASE_NAME
+- {static} AppDatabase instance
++ {abstract}ProjectDao getProjectDao()
++ {abstract}TaskDao getTaskDao()
++ {static} AppDatabase getInstance(Application,Executor)
+- {static} AppDatabase create(Application,Executor)
+}
+class Project {
+- long id
+- String name
+- int color
++ long getId()
++ String getName()
++ int getColor()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+class Task {
+- long id
+- long projectId
+- String taskDescription
++ long getId()
++ long getProjectId()
++ String getTaskDescription()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+interface TaskDao {
+~ void insert(Task)
+~ int delete(long)
+~ LiveData<List<Task>> getAllTasks()
+}
+interface ProjectDao {
+~ void insert(Project)
+~ LiveData<List<Project>> getAllProjects()
+}
+}
+
+/'class MainActivity {
+# void onCreate(Bundle)
+}'/
+
+class Repository.TaskRepository {
+- ProjectDao projectDao
+- TaskDao taskDao
++ LiveData<List<Project>> getAllProjects()
++ LiveData<List<Task>> getAllTasks()
++ void addTask(Task)
++ void deleteTask(long)
+}
+
+class DI.DatabaseModule {
++ Executor provideIoExecutor()
++ Executor provideMainExecutor()
++ AppDatabase provideDatabase(Application,Executor)
++ ProjectDao provideProjectDao(AppDatabase)
++ TaskDao provideTaskDao(AppDatabase)
+}
+
+TaskFragment --> TaskViewModel : observe
+TaskViewModel --> TaskViewState : expose
+TaskFragment --> TaskViewState : affiche
+TaskViewModel <--> Repository.TaskRepository
+TaskViewModel <.. DI.DatabaseModule
+
+AddTaskDialogFragment --> AddTaskViewModel : observe
+AddTaskViewModel --> AddTaskViewState : expose
+AddTaskDialogFragment --> AddTaskViewState : affiche
+AddTaskViewModel <--> Repository.TaskRepository
+AddTaskViewModel <.. DI.DatabaseModule
+
+Repository.TaskRepository <--> AppDatabase
+Repository.TaskRepository <--> ProjectDao
+Repository.TaskRepository <--> TaskDao
+Repository.TaskRepository <--> Project
+Repository.TaskRepository <--> Task
+Repository.TaskRepository <.. DI.DatabaseModule
+
+AppDatabase <--> ProjectDao
+AppDatabase <--> TaskDao
+AppDatabase <..> DI.DatabaseModule
+
+Project --> ProjectDao
+Task --> TaskDao
+
+
+@enduml
