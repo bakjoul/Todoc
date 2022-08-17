@@ -108,6 +108,7 @@ android.applicationVariants.all { variant ->
         }
 
         reports {
+            //noinspection GrDeprecatedAPIUsage
             xml.enabled = true
             html {
                 destination htmlOutDir
